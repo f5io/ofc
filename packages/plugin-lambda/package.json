@@ -1,0 +1,26 @@
+{
+  "name": "plugin-lambda",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "f5io <joe@f5.io>",
+  "homepage": "",
+  "license": "ISC",
+  "main": "lib/plugin-lambda.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "dependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/parser": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-typescript": "^7.3.3",
+    "rollup-plugin-babel": "^4.3.3"
+  }
+}

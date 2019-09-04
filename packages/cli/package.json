@@ -1,0 +1,27 @@
+{
+  "name": "cli",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "f5io <joe@f5.io>",
+  "homepage": "",
+  "license": "ISC",
+  "main": "dist/cli.js",
+  "module": "dist/cli.module.js",
+  "bin": {
+    "cli": "bin/cli"
+  },
+  "directories": {
+    "lib": "dist",
+    "test": "__tests__"
+  },
+  "files": [
+    "bin",
+    "dist"
+  ],
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "dependencies": {
+    "yargs": "^14.0.0"
+  }
+}
