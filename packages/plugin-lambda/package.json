@@ -1,5 +1,5 @@
 {
-  "name": "plugin-lambda",
+  "name": "@ofc/plugin-lambda",
   "version": "0.0.0",
   "description": "> TODO: description",
   "author": "f5io <joe@f5.io>",

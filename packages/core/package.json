@@ -1,5 +1,5 @@
 {
-  "name": "core",
+  "name": "@ofc/core",
   "version": "0.0.0",
   "description": "> TODO: description",
   "author": "f5io <joe@f5.io>",
@@ -17,14 +17,12 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "rollup": "^1.20.3",
+    "@ofc/plugin-lambda": "^0.0.0",
+    "@ofc/plugin-react": "^0.0.0",
     "fast-glob": "^3.0.4",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-replace": "^2.2.0",
+    "rollup": "^1.20.3",
     "rollup-plugin-commonjs": "^10.1.0",
-    "plugin-lambda": "file:../plugin-lambda",
-    "plugin-react": "file:../plugin-react"
-  },
-  "peerDependencies": {
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-replace": "^2.2.0"
   }
 }
