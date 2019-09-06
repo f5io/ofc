@@ -1,85 +1,87 @@
-const rollup = require('rollup');
-const replace = require('rollup-plugin-replace');
-const resolve = require('rollup-plugin-node-resolve');
-const commonjs = require('rollup-plugin-commonjs');
-
-const basePlugins = (replaceOptions = {}, namedExportOptions = {}) => console.log(replaceOptions, namedExportOptions) || [
-  replace({
-    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
-    ...replaceOptions,
-  }),
-  resolve({ preferBuiltins: true }),
-  commonjs({
-    include: 'node_modules/**',
-    namedExports: namedExportOptions,
-  }),
-];
-
-const generate = async ({
-  input,
-  plugins,
-  outputOptions,
-  replaceOptions,
-  namedExportOptions,
-}) => {
-  const bundle = await rollup.rollup({
-    input,
-    plugins: [
-      ...plugins,
-      ...basePlugins(replaceOptions, namedExportOptions),
-    ],
-  });
-
-  return {
-    bundle,
-    write: () => bundle.write({ output: outputOptions }),
-    ...await bundle.generate({ output: outputOptions }),
-  };
-};
-
-exports.generate = generate;
-
+const { Worker, MessageChannel } = require('worker_threads');
 const fg = require('fast-glob');
 const fs = require('fs').promises;
-const pluginReact = require('plugin-react');
-const pluginLambda = require('plugin-lambda');
-const path = require('path');
+const { join, resolve } = require('path');
 
-const write = async (isDev = true) => {
-  const plugins = [
-    [ '.{jsx,tsx}', pluginReact ],
-    [ '.{js,ts}', pluginLambda ],
-  ];
+const server = require('@ofc/server');
 
+const start = async ({
+  serve = true,
+  production = false,
+  plugins = [
+    [ '.{jsx,tsx}', '@ofc/plugin-react' ],
+    [ '.{js,ts}', '@ofc/plugin-lambda' ],
+  ],
+}) => {
+  
+  const ignoreFile = await fs.readFile(resolve('.ofcignore'), 'utf8')
+    .catch(() => ({ split: () => [] }));
 
-  const ignoreFile = await fs.readFile(path.resolve('.ofcignore'), 'utf8').catch(() => '');
   const ignore = [ '!node_modules/**/*', '!.ofc/**/*' ]
     .concat(ignoreFile.split('\n').filter(x => x).map(x => `!${x}`));
 
   const files = await Promise.all(
     plugins.map(
-      ([ ext, plugin ]) => fg([ `**/*${ext}`, ...ignore ])
-        .then(files => files.map(f => [ f, plugin ]))
+      ([ ext, pluginName ]) => fg([ `**/*${ext}`, ...ignore ])
+        .then(files => files.map(input => [ input, pluginName ]))
     )
   );
 
-  const bundles = await Promise.all(
-    files.flat()
-      .flatMap(([ f, plugin ]) => plugin(f))
-      .map(generate)
-  );
+  const { port1, port2 } = new MessageChannel();
 
-  if (isDev) {
-    // TODO: do hot module shizzle
+  const workers = files.flat()
+    .map(([ input, pluginName ]) => {
+      return new Promise((resolve, reject) => {
+        const worker = new Worker(
+          join(__dirname, 'worker.js'),
+          {
+            workerData: {
+              input,
+              pluginName,
+              production,
+              watch: !production && serve
+            }
+          },
+        );
+
+        worker.on('error', err => {
+          console.log(err);
+          if (reject) reject(err);
+          reject = null;
+        });
+        worker.on('message', event =>  {
+          if (event.code === 'PLUGIN_SETTLED') {
+            if (resolve) {
+              console.log('complete, terminating worker');
+              resolve(event);
+              worker.terminate();
+            }
+          }
+        });
+
+        if (!production && serve) {
+          resolve(worker);
+          resolve = null;
+        }
+      });
+      
+    });
+
+  const result = await Promise.all(workers);
+  if (!production && serve) {
+    result.forEach(worker => {
+      worker.on('message', message => port1.postMessage(message));
+    });
+    server({ messagePort: port2 });
+  } else if (serve) {
+    server({ manifest: result });  
+  } else {
+    console.dir(result, { depth: null });
+    process.exit();
   }
-
-  await Promise.all(
-    bundles.map(({ write }) => write())
-  );
-
 };
 
-exports.write = write;
+exports.start = start;
 
 
 

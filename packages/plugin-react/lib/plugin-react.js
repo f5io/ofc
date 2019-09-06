@@ -2,7 +2,11 @@ const { resolve, normalize, join, parse } = require('path');
 const transformer = require('./transformer');
 const babel = require('rollup-plugin-babel');
 
-const getPlugins = ({ targets, path }) => {
+const getPlugins = ({
+  path,
+  production,
+  targets,
+}) => {
   return [
     transformer(targets),
     babel({
@@ -17,11 +21,14 @@ const getPlugins = ({ targets, path }) => {
   ]
 };
 
-const plugin = input => {
+const plugin = ({
+  input,
+  production,
+}) => {
   const path = parse(normalize(input));
 
   const replaceOptions = {
-    'OFC_REACT_ASSET': join(path.dir, path.name),
+    'OFC_REACT_ASSET': production ? join(path.dir, path.name + '.js') : input,
     'OFC_REACT_APP': process.env.OFC_REACT_APP || '_ofc_app',
     'OFC_REACT_PROPS': process.env.OFC_REACT_PROPS || '_ofc_props',
   };
@@ -41,8 +48,10 @@ const plugin = input => {
   return [
     {
       input,
+      production,
       plugins: getPlugins({
         path,
+        production,
         targets: { node: true },
       }),
       outputOptions: {
@@ -54,17 +63,23 @@ const plugin = input => {
     },
     {
       input,
+      production,
       plugins: getPlugins({
         path,
+        production,
         targets: { esmodules: true },
       }),
       outputOptions: {
         dir: resolve('./.ofc/assets'),
         format: 'esm',
-        sourcemap: process.env.NODE_ENV !== 'production',
+        sourcemap: !production,
       },
-      replaceOptions,
+      replaceOptions: {
+        ...replaceOptions,
+        'process.browser': 'true',
+      },
       namedExportOptions,
+      isEndpoint: false,
     }
   ];
 };

@@ -1,9 +1,13 @@
 const { resolve } = require('path');
 const babel = require('rollup-plugin-babel');
 
-const plugin = input => {
+const plugin = ({
+  input,
+  production,
+}) => {
   return {
     input,
+    production,
     plugins: [
       babel({
         exclude: 'node_modules/**',

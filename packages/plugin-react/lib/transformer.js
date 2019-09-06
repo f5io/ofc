@@ -1,5 +1,26 @@
 const { parser, printer, b, n, visit } = require('./parser');
 const { resolve, join } = require('path');
+const fs = require('fs').promises;
+
+const serverImpl = join(__dirname, 'helpers/server.js');
+const serverAST = fs.readFile(serverImpl, 'utf8')
+  .then(code => parser(code, serverImpl));
+
+const browserImpl = join(__dirname, 'helpers/browser.js');
+const browserAST = fs.readFile(browserImpl, 'utf8')
+  .then(code => parser(code, browserImpl));
+
+const hasDefaultImport = (local, ast) => {
+  let result = false;
+  visit(ast, {
+    visitImportDefaultSpecifier(path) {
+      if (path.node.local.name === local)
+        result = true;
+      return false;
+    }
+  });
+  return result;
+};
 
 const injectImport = (identifier, source, ast) => {
   const imp = b.importDeclaration([
@@ -58,8 +79,15 @@ const hasExportNamed = (identifier) => (ast) => {
   return result;
 };
 
-const injectServerRenderer = (ast, identifier, props) => {
-  injectImport('__ofc', internals.server, ast); 
+const injectServerRenderer = async (ast, identifier, props) => {
+  const server = await serverAST;
+  ast.program.body.unshift(...server.program.body);
+  if (!hasDefaultImport('React', ast)) {
+    injectImport('React', 'react', ast);
+  }
+  if (!hasDefaultImport('ReactDOMServer', ast)) {
+    injectImport('ReactDOMServer', 'react-dom/server', ast);
+  }
   const def = b.exportDefaultDeclaration(
     b.callExpression(
       b.identifier('__ofc'),
@@ -73,8 +101,15 @@ const injectServerRenderer = (ast, identifier, props) => {
   return ast;
 };
 
-const injectBrowserRenderer = (ast, identifier) => {
-  injectImport('__ofc', internals.browser, ast);
+const injectBrowserRenderer = async (ast, identifier) => {
+  const browser = await browserAST;
+  ast.program.body.unshift(...browser.program.body);
+  if (!hasDefaultImport('React', ast)) {
+    injectImport('React', 'react', ast);
+  }
+  if (!hasDefaultImport('ReactDOM', ast)) {
+    injectImport('ReactDOM', 'react-dom', ast);
+  }
   const def = b.expressionStatement(
     b.callExpression(
       b.identifier('__ofc'),
@@ -100,16 +135,16 @@ const plugin = ({ node: server }) => ({
     }
     return null;
   },
-  transform(code, id) {
+  async transform(code, id) {
     const moduleInfo = this.getModuleInfo(id);
     if (!moduleInfo.isEntry) return;
     const ast = parser(code, id);
     const props = hasInitialProps(ast);
     const identifier = getDefaultExport(ast);
 
-    server
+    await (server
       ? injectServerRenderer(ast, identifier, props)
-      : injectBrowserRenderer(ast, identifier);
+      : injectBrowserRenderer(ast, identifier));
 
     const result = printer(ast, `${id}.map`);
     return { ast, ...result };

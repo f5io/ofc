@@ -19,10 +19,13 @@
   "dependencies": {
     "@ofc/plugin-lambda": "^0.0.0",
     "@ofc/plugin-react": "^0.0.0",
+    "@ofc/server": "^0.0.0",
     "fast-glob": "^3.0.4",
-    "rollup": "^1.20.3",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-replace": "^2.2.0"
+  },
+  "peerDependencies": {
+    "rollup": "^1.20.3"
   }
 }

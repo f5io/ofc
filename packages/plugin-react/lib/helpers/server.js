@@ -1,7 +1,4 @@
-import React from 'react';
-import ReactDOMServer from 'react-dom/server';
-
-export default (app, getInitialProps) => async (ctx) => {
+const __ofc = (app, getInitialProps) => async (ctx) => {
   const App = React.createFactory(app);
   const props = getInitialProps
     ? (await getInitialProps(ctx))
@@ -21,7 +18,7 @@ export default (app, getInitialProps) => async (ctx) => {
         <script>
           window.OFC_REACT_PROPS = ${JSON.stringify(props)}
         </script>
-        <script src="/assets/OFC_REACT_ASSET.js" type="module"></script>
+        <script src="/assets/OFC_REACT_ASSET" type="module"></script>
       </body>
     </html>
   `;
