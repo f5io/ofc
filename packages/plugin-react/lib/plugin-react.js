@@ -42,6 +42,9 @@ const plugin = ({
       'useRef', 'useState',
       'Fragment', 'Profiler', 'StrictMode', 'Suspense', 'unstable_SuspenseList',
       'createElement', 'cloneElement', 'createFactory', 'isValidElement',
+    ],
+    'node_modules/react-is/index.js': [
+      'isElement', 'isValidElementType', 'ForwardRef',
     ]
   };
 

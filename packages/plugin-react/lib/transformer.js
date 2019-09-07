@@ -4,11 +4,31 @@ const fs = require('fs').promises;
 
 const serverImpl = join(__dirname, 'helpers/server.js');
 const serverAST = fs.readFile(serverImpl, 'utf8')
-  .then(code => parser(code, serverImpl));
+  .then(code => parser(code, serverImpl))
+  .then(ast => {
+    getDefaultExport(ast);
+    return ast;
+  });
 
 const browserImpl = join(__dirname, 'helpers/browser.js');
 const browserAST = fs.readFile(browserImpl, 'utf8')
-  .then(code => parser(code, browserImpl));
+  .then(code => parser(code, browserImpl))
+  .then(ast => {
+    getDefaultExport(ast);
+    return ast;
+  });
+
+const removeNamedImport = (local, ast) => {
+  visit(ast, {
+    visitImportDefaultSpecifier(path) {
+      if (path.node.local.name === local) {
+        path.replace(null);
+      }
+      return false;
+    }
+  });
+  return ast;
+}
 
 const hasDefaultImport = (local, ast) => {
   let result = false;
@@ -123,15 +143,10 @@ const injectBrowserRenderer = async (ast, identifier) => {
 
 const hasInitialProps = hasExportNamed('getInitialProps');
 
-const internals = {
-  browser: resolve(join(__dirname, 'helpers/browser.js')),
-  server: resolve(join(__dirname, 'helpers/server.js')),
-};
-
 const plugin = ({ node: server }) => ({
   resolveId(id) {
-    if (Object.values(internals).includes(id)) {
-      return { id, external: false };
+    if (!server && id === 'styled-components') {
+      return './node_modules/styled-components/dist/styled-components.browser.esm.js';
     }
     return null;
   },

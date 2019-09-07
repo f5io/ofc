@@ -1,8 +1,17 @@
+import __ofc_React from 'react';
+import __ofc_ReactDOMServer from 'react-dom/server';
+import { ServerStyleSheet as __ofc_ServerStyleSheet } from 'styled-components';
+
 const __ofc = (app, getInitialProps) => async (ctx) => {
-  const App = React.createFactory(app);
+  const App = __ofc_React.createFactory(app);
   const props = getInitialProps
     ? (await getInitialProps(ctx))
     : {};
+
+  const sheet = new __ofc_ServerStyleSheet();
+  const html = __ofc_ReactDOMServer.renderToString(
+    sheet.collectStyles(App(props))
+  );
 
   ctx.type = '.html';
   ctx.body = `
@@ -10,11 +19,10 @@ const __ofc = (app, getInitialProps) => async (ctx) => {
     <html>
       <head>
         <title>React App</title>
+        ${sheet.getStyleTags()}
       </head>
       <body>
-        <div id="OFC_REACT_APP">
-          ${ReactDOMServer.renderToString(App(props))}
-        </div>
+        <div id="OFC_REACT_APP">${html}</div>
         <script>
           window.OFC_REACT_PROPS = ${JSON.stringify(props)}
         </script>
@@ -24,3 +32,5 @@ const __ofc = (app, getInitialProps) => async (ctx) => {
   `;
 
 };
+
+export default __ofc;
