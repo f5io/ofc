@@ -1,1 +1,1 @@
-require('../packages/core/lib/core').start({});
+require('@ofc/core').start({});
