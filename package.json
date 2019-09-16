@@ -2,12 +2,10 @@
   "name": "root",
   "private": true,
   "workspaces": [
+    "example",
     "packages/*"
   ],
   "devDependencies": {
     "lerna": "^3.16.4"
-  },
-  "dependencies": {
-    "rollup": "^1.20.3"
   }
 }

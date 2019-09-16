@@ -102,12 +102,18 @@ const hasExportNamed = (identifier) => (ast) => {
 const injectServerRenderer = async (ast, identifier, props) => {
   const server = await serverAST;
   ast.program.body.unshift(...server.program.body);
-  if (!hasDefaultImport('React', ast)) {
-    injectImport('React', 'react', ast);
-  }
-  if (!hasDefaultImport('ReactDOMServer', ast)) {
-    injectImport('ReactDOMServer', 'react-dom/server', ast);
-  }
+
+  visit(ast, {
+    visitCallExpression(path) {
+      this.traverse(path);
+      if (path.node.callee.name === 'fetch') {
+        path.node.callee.name = '__ofc_fetch';
+        path.replace(path.node);
+      }
+      return false;
+    }
+  });
+
   const def = b.exportDefaultDeclaration(
     b.callExpression(
       b.identifier('__ofc'),
@@ -124,12 +130,6 @@ const injectServerRenderer = async (ast, identifier, props) => {
 const injectBrowserRenderer = async (ast, identifier) => {
   const browser = await browserAST;
   ast.program.body.unshift(...browser.program.body);
-  if (!hasDefaultImport('React', ast)) {
-    injectImport('React', 'react', ast);
-  }
-  if (!hasDefaultImport('ReactDOM', ast)) {
-    injectImport('ReactDOM', 'react-dom', ast);
-  }
   const def = b.expressionStatement(
     b.callExpression(
       b.identifier('__ofc'),
@@ -144,12 +144,7 @@ const injectBrowserRenderer = async (ast, identifier) => {
 const hasInitialProps = hasExportNamed('getInitialProps');
 
 const plugin = ({ node: server }) => ({
-  resolveId(id) {
-    if (!server && id === 'styled-components') {
-      return './node_modules/styled-components/dist/styled-components.browser.esm.js';
-    }
-    return null;
-  },
+  name: '@ofc/plugin-react',
   async transform(code, id) {
     const moduleInfo = this.getModuleInfo(id);
     if (!moduleInfo.isEntry) return;

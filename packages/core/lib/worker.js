@@ -1,7 +1,8 @@
 const { parentPort, threadId, workerData } = require('worker_threads');
-const { join, resolve } = require('path');
+const { join, parse, resolve } = require('path');
 const fs = require('fs').promises;
 const rollup = require('rollup');
+const json = require('rollup-plugin-json');
 const replace = require('rollup-plugin-replace');
 const node_resolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
@@ -9,13 +10,20 @@ const commonjs = require('rollup-plugin-commonjs');
 const basePlugins = ({
   production,
   replaceOptions = {},
+  resolveOptions = {},
   namedExportOptions = {},
 }) => [
+  json(),
   replace({
     'process.env.NODE_ENV': JSON.stringify(production ? 'production' : 'development'),
+    'OFC_PORT': '3000',
     ...replaceOptions,
   }),
-  node_resolve({ preferBuiltins: true }),
+  node_resolve({
+    preferBuiltins: true,
+    jail: process.cwd(),
+    ...resolveOptions,
+  }),
   commonjs({
     include: 'node_modules/**',
     namedExports: namedExportOptions,
@@ -29,10 +37,12 @@ const generate = ({
   plugins,
   outputOptions,
   replaceOptions,
+  resolveOptions,
   namedExportOptions,
   isEndpoint = true,
 }) => {
-  const absolutePath = resolve(join(outputOptions.dir, input));
+  const { dir, name } = parse(input);
+  const absolutePath = resolve(join(outputOptions.dir, dir, name + '.js'));
 
   const cache = (() => {
     let inner = null; 
@@ -70,6 +80,7 @@ const generate = ({
     ...basePlugins({
       production,
       replaceOptions,
+      resolveOptions,
       namedExportOptions
     }),
   ];

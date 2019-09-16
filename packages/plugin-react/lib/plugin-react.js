@@ -28,7 +28,7 @@ const plugin = ({
   const path = parse(normalize(input));
 
   const replaceOptions = {
-    'OFC_REACT_ASSET': production ? join(path.dir, path.name + '.js') : input,
+    'OFC_REACT_ASSET': join(path.dir, path.name + '.js'),
     'OFC_REACT_APP': process.env.OFC_REACT_APP || '_ofc_app',
     'OFC_REACT_PROPS': process.env.OFC_REACT_PROPS || '_ofc_props',
   };
@@ -61,7 +61,15 @@ const plugin = ({
         dir: resolve('./.ofc/server'),
         format: 'cjs',
       },
-      replaceOptions,
+      replaceOptions: {
+        ...replaceOptions,
+        'process.browser': 'false',
+      },
+      resolveOptions: {
+        mainFields: [ 'main' ],
+        dedupe: [ 'react', 'react-dom', 'styled-components' ],
+        extensions: [ '.js', '.json', '.node' ],
+      },
       namedExportOptions,
     },
     {
@@ -80,6 +88,10 @@ const plugin = ({
       replaceOptions: {
         ...replaceOptions,
         'process.browser': 'true',
+      },
+      resolveOptions: {
+        mainFields: [ 'module', 'main', 'browser' ],
+        dedupe: [ 'react', 'react-dom', 'styled-components' ],
       },
       namedExportOptions,
       isEndpoint: false,
