@@ -11,12 +11,6 @@ const assets = () => {
   const handler = static(resolve('./.ofc')); 
   return async (ctx, next) => {
     if (ctx.path.startsWith('/assets')) {
-      if (
-        [ '.ts', '.jsx', '.tsx', 'commonjs-proxy' ]
-          .some(x => ctx.path.endsWith(x))
-      ) {
-        ctx.type = '.js';
-      }
       await handler(ctx, next);
     } else {
       await next();
@@ -33,6 +27,17 @@ const handler = (root) => {
       await next();
     }
   };
+};
+
+const invalidate = ({ input, absolutePath }) => {
+  if (!absolutePath || !absolutePath.includes('.ofc/server')) return false;
+  delete require.cache[absolutePath];
+  const { name, dir, base, ext } = parse(input);
+  matchers.set(join(dir, name), require(absolutePath));
+  if (name === 'index') {
+    matchers.set(dir, require(absolutePath));
+  }
+  console.log(`reinitialised :: ${input}`);
 };
 
 const development = (app, messagePort) => {
@@ -68,18 +73,6 @@ const development = (app, messagePort) => {
     }
   };
 
-  const invalidate = ({ input, absolutePath }) => {
-    if (!absolutePath || !absolutePath.includes('.ofc/server')) return false;
-    delete require.cache[absolutePath];
-    const { name, dir, base, ext } = parse(input); 
-    require.extensions[ext] = require.extensions['.js'];
-    matchers.set(join(dir, name), require(absolutePath));
-    if (name === 'index') {
-      matchers.set(dir, require(absolutePath));
-    }
-    console.log(`reinitialised :: ${input}`);
-  };
-
   messagePort.on('message', ({ code, input, ...event }) => {
     if (code === 'WRITE_END') {
       console.log({ code, input, ...event });
@@ -97,6 +90,11 @@ module.exports = ({
   production,
 }) => {
   const root = resolve('./.ofc/server'); 
+
+  manifest
+    .flatMap(x => x.results)
+    .map(x => x.value)
+    .forEach(invalidate);
 
   app.use(assets());
 

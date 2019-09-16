@@ -7,7 +7,7 @@ const server = require('@ofc/server');
 
 const start = async ({
   serve = true,
-  production = false,
+  production = true,
   plugins = [
     [ '.{jsx,tsx}', '@ofc/plugin-react' ],
     [ '.{js,ts}', '@ofc/plugin-lambda' ],
@@ -72,9 +72,9 @@ const start = async ({
     result.forEach(worker => {
       worker.on('message', message => port1.postMessage(message));
     });
-    server({ messagePort: port2 });
+    server({ messagePort: port2, production });
   } else if (serve) {
-    server({ manifest: result });  
+    server({ manifest: result, production });
   } else {
     console.dir(result, { depth: null });
     process.exit();
