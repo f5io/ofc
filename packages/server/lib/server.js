@@ -2,6 +2,12 @@ const Koa = require('koa');
 const { resolve, normalize, relative, join, parse } = require('path');
 const static = require('koa-static');
 const { PassThrough } = require('stream');
+const { compose, uriToRegex } = require('./utils');
+
+/*
+ * TODO
+ * - add body parser
+ */
 
 const app = new Koa();
 
@@ -11,6 +17,9 @@ const assets = () => {
   const handler = static(resolve('./.ofc')); 
   return async (ctx, next) => {
     if (ctx.path.startsWith('/assets')) {
+      if (ctx.path.endsWith('commonjs-proxy')) {
+        ctx.type = '.js';
+      }
       await handler(ctx, next);
     } else {
       await next();
@@ -20,24 +29,40 @@ const assets = () => {
 
 const handler = (root) => {
   return async (ctx, next) => {
-    const path = ctx.path.slice(1);
-    if (matchers.has(path)) {
-      await matchers.get(path)(ctx, next);
+    const { params, handler } = [ ...matchers.entries() ]
+      .reduce((acc, [ re, h ]) => {
+        const r = re.exec(ctx.path);
+        if (r) {
+          const params = r.groups || {};
+
+          if (!acc.handler)
+            return {
+              params,
+              handler: h
+            };
+
+          if (Object.keys(params).length < Object.keys(acc.params).length) {
+            acc = { params, handler: h };
+          }
+        }
+        return acc;
+      }, {});
+
+    if (handler) {
+      ctx.params = params;
+      await handler(ctx, next);
     } else {
       await next();
     }
   };
 };
 
-const invalidate = ({ input, absolutePath }) => {
+const invalidate = ({ input, uri, absolutePath }) => {
   if (!absolutePath || !absolutePath.includes('.ofc/server')) return false;
   delete require.cache[absolutePath];
-  const { name, dir, base, ext } = parse(input);
-  matchers.set(join(dir, name), require(absolutePath));
-  if (name === 'index') {
-    matchers.set(dir, require(absolutePath));
-  }
-  console.log(`reinitialised :: ${input}`);
+  const re = uriToRegex(uri);
+  matchers.set(re, require(absolutePath));
+  console.log(`mounted :: ${input} on uri :: ${uri} with regex :: ${re}`);
 };
 
 const development = (app, messagePort) => {
@@ -91,10 +116,11 @@ module.exports = ({
 }) => {
   const root = resolve('./.ofc/server'); 
 
-  manifest
-    .flatMap(x => x.results)
-    .map(x => x.value)
-    .forEach(invalidate);
+  if (manifest)
+    manifest
+      .flatMap(x => x.results)
+      .map(x => x.value)
+      .forEach(invalidate);
 
   app.use(assets());
 

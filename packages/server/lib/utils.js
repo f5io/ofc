@@ -1,0 +1,62 @@
+/**
+ * This symbol definition is used to determine whether the last argument
+ * passed into a middleware is already a defined `next` call.
+ *
+ * This allows for `compose(mw1, compose(mw2, mw3))` to work as intended.
+ */
+const isNext = Symbol('isNext');
+
+/**
+ * `compose` is variadic and takes middlewares as input.
+ * It returns a variadic function which is invoked with context(s) and then executes
+ * the middleware, currently `left-to-right`, returning a new `async` function.
+ */
+const compose = (...mw) =>
+  async (...args) => {
+    /**
+     * The last `next` in the chain, should either call the `next` handler
+     * passed via `args` (denoting a continuation into another composition),
+     * or do a no-op.
+     */
+    const nxt = args[args.length - 1][isNext] ? args.pop() : () => {};
+    /**
+     * `await` execution of all the middleware provided, by reducing each
+     * supplied middleware and wrapping each function execution.
+     */
+    await mw.reduceRight((next, curr) =>
+      async () => {
+        /**
+         * Decorate each `next` handler with our `isNext` symbol to facilitate
+         * composition of compositions.
+         */
+        next[isNext] = true;
+        await curr(...args.concat(next));
+      },
+      nxt,
+    )();
+  };
+
+const uriToRegex = (() => {
+  const cache = new Map();
+
+  const constructRegex = uri => `^${
+    uri
+      .replace(/\$([^\/]+)/g, '(?<$1>[^\/]+?)')
+      .replace(/\/index$/, '(?:\/index)?')
+      .replace(/$/, '\/?')
+      .replace(/\//g, '\\/')
+  }$`;
+
+  return uri => {
+    if (!cache.has(uri)) {
+      cache.set(uri, new RegExp(constructRegex(uri), 'i'));
+    }
+    return cache.get(uri);
+  };
+  
+})();
+
+module.exports = {
+  compose,
+  uriToRegex,
+};

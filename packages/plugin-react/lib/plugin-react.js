@@ -1,5 +1,6 @@
 const { resolve, normalize, join, parse } = require('path');
 const transformer = require('./transformer');
+const fetch = require('@ofc/transform-fetch');
 const babel = require('rollup-plugin-babel');
 
 const getPlugins = ({
@@ -7,7 +8,12 @@ const getPlugins = ({
   production,
   targets,
 }) => {
+  const preludes = targets.node
+    ? [ fetch() ]
+    : [];
+
   return [
+    ...preludes,
     transformer(targets),
     babel({
       exclude: 'node_modules/**',
@@ -58,7 +64,7 @@ const plugin = ({
         targets: { node: true },
       }),
       outputOptions: {
-        dir: resolve('./.ofc/server'),
+        dir: resolve('./.ofc/server', path.dir),
         format: 'cjs',
       },
       replaceOptions: {
@@ -81,7 +87,7 @@ const plugin = ({
         targets: { esmodules: true },
       }),
       outputOptions: {
-        dir: resolve('./.ofc/assets'),
+        dir: resolve('./.ofc/assets', path.dir),
         format: 'esm',
         sourcemap: !production,
       },

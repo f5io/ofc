@@ -1,4 +1,5 @@
-const { resolve } = require('path');
+const { resolve, dirname } = require('path');
+const fetch = require('@ofc/transform-fetch');
 const babel = require('rollup-plugin-babel');
 
 const plugin = ({
@@ -9,6 +10,7 @@ const plugin = ({
     input,
     production,
     plugins: [
+      fetch(),
       babel({
         exclude: 'node_modules/**',
         extensions: [ '.js', '.ts' ],
@@ -19,7 +21,7 @@ const plugin = ({
       }),
     ],
     outputOptions: {
-      dir: resolve('./.ofc/server'),
+      dir: resolve('./.ofc/server', dirname(input)),
       format: 'cjs',
     },
   };

@@ -42,7 +42,8 @@ const generate = ({
   isEndpoint = true,
 }) => {
   const { dir, name } = parse(input);
-  const absolutePath = resolve(join(outputOptions.dir, dir, name + '.js'));
+  const uri = '/' + join(dir, name);
+  const absolutePath = resolve(join(outputOptions.dir, name + '.js'));
 
   const cache = (() => {
     let inner = null; 
@@ -68,6 +69,7 @@ const generate = ({
       ...event,
       threadId,
       absolutePath,
+      uri,
       input,
     });
 
@@ -113,7 +115,7 @@ const generate = ({
     })
     .then(bundle => bundle.write(options))
     .then(() => cache.set(options.cache))
-    .then(() => ({ input, absolutePath }));
+    .then(() => ({ input, uri, absolutePath }));
 
 };
 

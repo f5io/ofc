@@ -7,7 +7,7 @@ const server = require('@ofc/server');
 
 const start = async ({
   serve = true,
-  production = true,
+  production = false,
   plugins = [
     [ '.{jsx,tsx}', '@ofc/plugin-react' ],
     [ '.{js,ts}', '@ofc/plugin-lambda' ],

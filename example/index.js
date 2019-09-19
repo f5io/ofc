@@ -1,1 +1,4 @@
-require('@ofc/core').start({});
+require('@ofc/core').start({
+  production: true,
+  serve: true,
+});

@@ -1,4 +1,4 @@
-const { parser, printer, b, n, visit } = require('./parser');
+const { parser, printer, b, n, visit } = require('@ofc/parser');
 const { resolve, join } = require('path');
 const fs = require('fs').promises;
 
@@ -58,6 +58,9 @@ const getDefaultExport = ast => {
       const node = path.node;
       if (n.Identifier.check(node.declaration)) {
         result = node.declaration.name;
+      } else if (n.FunctionDeclaration.check(node.declaration)) {
+        result = node.declaration.id.name;
+        path.insertBefore(node.declaration);
       } else {
         const hoist = b.variableDeclaration('const', [
           b.variableDeclarator(
@@ -102,17 +105,6 @@ const hasExportNamed = (identifier) => (ast) => {
 const injectServerRenderer = async (ast, identifier, props) => {
   const server = await serverAST;
   ast.program.body.unshift(...server.program.body);
-
-  visit(ast, {
-    visitCallExpression(path) {
-      this.traverse(path);
-      if (path.node.callee.name === 'fetch') {
-        path.node.callee.name = '__ofc_fetch';
-        path.replace(path.node);
-      }
-      return false;
-    }
-  });
 
   const def = b.exportDefaultDeclaration(
     b.callExpression(

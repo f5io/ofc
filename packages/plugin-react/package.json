@@ -17,12 +17,11 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@babel/core": "^7.5.5",
-    "@babel/parser": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.3.3",
-    "recast": "^0.18.2",
+    "@ofc/parser": "^0.0.0",
+    "@ofc/transform-fetch": "^0.0.0",
     "rollup-plugin-babel": "^4.3.3"
   },
   "peerDependencies": {
