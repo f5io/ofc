@@ -1,26 +1,48 @@
-'use strict';
+const core = require('@ofc/core');
+const pkg = require('../package.json');
 
-const yargs = require('yargs/yargs');
-const cli = require('./cli');
 
-module.exports = cli;
+const logo = (extra = '') => `
+        ·▄▄▄ ▄▄· ▄▄ 
+  ▪     ▐▄▄·▐█ ▌▪██▌
+   ▄█▀▄ ██▪ ██ ▄▄▐█·
+  ▐█▌.▐▌██▌.▐███▌.▀ 
+   ▀█▄▀▪▀▀▀ ·▀▀▀  ▀     ${extra}
+`;
 
-function cli(cwd) {
-  const parser = factory(null, cwd);
+const usage = () => logo('Usage: $0 [command] [env]');
 
-  parser.alias('h', 'help');
-  parser.alias('v', 'version');
+const prodAlias = [ 'prod', 'production' ];
 
-  parser.usage(
-    "$0",
-    "TODO: description",
-    yargs => {
-      yargs.options({
-        // TODO: options
-      });
-    },
-    argv => cli(argv)
-  );
+const run = (env, serve) => {
+  const message = serve
+    ? `Shit's gonna be happening on http://0.0.0.0:3000`
+    : `I'm just building... hold up!`;
 
-  return parser;
-}
+  console.log(logo(message));
+  core.start({
+    serve,
+    production: prodAlias.includes(env),
+  });
+};
+
+const program = require('yargs')
+  .usage(usage())
+  .alias('h', 'help')
+  .command({
+    command: 'serve [env]',
+    aliases: [ 's', '$0' ],
+    desc: 'build and serve the current directory',
+    builder: yargs => yargs.default('env', 'development'),
+    handler: argv => run(argv.env, true),
+  })
+  .command({
+    command: 'build [env]',
+    aliases: [ 'b' ],
+    desc: 'build the current directory',
+    builder: yargs => yargs.default('env', 'development'),
+    handler: argv => run(argv.env, false),
+  })
+  .help();
+
+module.exports = () => program.argv;

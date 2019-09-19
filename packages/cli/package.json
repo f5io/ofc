@@ -7,7 +7,7 @@
   "license": "ISC",
   "main": "lib/cli.js",
   "bin": {
-    "cli": "bin/cli"
+    "ofc": "bin/cli"
   },
   "directories": {
     "lib": "lib",
@@ -25,6 +25,7 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
+    "@ofc/core": "^0.0.0",
     "yargs": "^14.0.0"
   },
   "bugs": {
