@@ -113,7 +113,10 @@ const generate = ({
       options.cache = cache;
       return rollup.rollup(options);
     })
-    .then(bundle => bundle.write(options))
+    .then(bundle => {
+      options.cache = bundle.cache;
+      return bundle.write(options)
+    })
     .then(() => cache.set(options.cache))
     .then(() => ({ input, uri, absolutePath }));
 
