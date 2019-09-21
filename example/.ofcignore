@@ -1,4 +1,11 @@
 index.js
 file.js
 file2.js
+test1.js
+test2.ts
+test3.jsx
+test4.tsx
+test5.jsx
+api/**/*.js
+api/**/*.ts
 node_modules/
