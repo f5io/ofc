@@ -1,4 +1,4 @@
-const { parentPort, threadId, workerData } = require('worker_threads');
+//const { parentPort, threadId, workerData } = require('worker_threads');
 const { join, parse, resolve } = require('path');
 const fs = require('fs').promises;
 const rollup = require('rollup');
@@ -6,6 +6,8 @@ const json = require('rollup-plugin-json');
 const replace = require('rollup-plugin-replace');
 const node_resolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
+
+const threadId = 1;
 
 const basePlugins = ({
   production,
@@ -31,6 +33,7 @@ const basePlugins = ({
 ];
 
 const generate = ({
+  parentPort,
   production,
   watch,
   input,
@@ -39,7 +42,6 @@ const generate = ({
   replaceOptions,
   resolveOptions,
   namedExportOptions,
-  isEndpoint = true,
 }) => {
   const { dir, name } = parse(input);
   const uri = '/' + join(dir, name);
@@ -121,19 +123,23 @@ const generate = ({
 
 const toArray = arr => Array.isArray(arr) ? arr : [ arr ];
 
-const prepare = ({ input, pluginName, production, watch }) => {
+const prepare = ({ parentPort, input, pluginName, production, watch }) => {
   const plugin = require(pluginName);
   const pluginOutput = plugin({ input, production, watch });
   return toArray(pluginOutput)
-    .map(po => generate({ production, watch, ...po }));
+    .map(po => generate({ parentPort, production, watch, ...po }));
 };
 
-Promise.allSettled(prepare(workerData))
-  .then(results => {
-    parentPort.postMessage({
-      code: 'PLUGIN_SETTLED',
-      threadId,
-      ...workerData,
-      results,
+const run = ({ parentPort, workerData }) =>
+  Promise.allSettled(prepare({ parentPort, ...workerData }))
+    .then(results => {
+      parentPort.postMessage({
+        code: 'PLUGIN_SETTLED',
+        threadId,
+        ...workerData,
+        results,
+      });
+      return results;
     });
-  });
+
+module.exports = { run };

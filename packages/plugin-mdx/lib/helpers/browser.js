@@ -2,7 +2,7 @@ import __ofc_React from 'react'
 import __ofc_ReactDOM from 'react-dom'
 
 if (process.env.NODE_ENV !== 'production') {
-  const es = new EventSource(`/_ofc_sse?w=OFC_REACT_ASSET`)
+  const es = new EventSource(`/_ofc_sse?w=OFC_REACT_INPUT`)
   es.addEventListener('WRITE_END', message => {
     window.location.reload()
   })

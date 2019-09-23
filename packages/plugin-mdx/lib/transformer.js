@@ -137,6 +137,7 @@ const plugin = ({ node: server }) => ({
     const ast = parser(jsx, id)
     const props = hasInitialProps(ast)
     const identifier = getDefaultExport(ast)
+
     await (server
       ? injectServerRenderer(ast, identifier, props)
       : injectBrowserRenderer(ast, identifier))

@@ -34,6 +34,7 @@ const plugin = ({
   const path = parse(normalize(input));
 
   const replaceOptions = {
+    'OFC_REACT_INPUT': input,
     'OFC_REACT_ASSET': join(path.dir, path.name + '.js'),
     'OFC_REACT_APP': process.env.OFC_REACT_APP || '_ofc_app',
     'OFC_REACT_PROPS': process.env.OFC_REACT_PROPS || '_ofc_props',

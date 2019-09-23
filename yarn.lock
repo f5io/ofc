@@ -1695,6 +1695,18 @@
     once "^1.4.0"
     universal-user-agent "^4.0.0"
 
+"@paybase/csp@^1.0.4":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@paybase/csp/-/csp-1.0.6.tgz#d2837120abe290a6ec5cd2f69a6ffde266d3de9a"
+  integrity sha512-tUghBhcbI8L3DAMgChc5fKOPBBC1LkWIHjEC2WhCPhHlmc6cRXsV4SZRTB4R5zv80rOiZ3xGBRcCcHq1cAN5+A==
+
+"@paybase/pool@^1.1.6":
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/@paybase/pool/-/pool-1.1.6.tgz#7f3bd43f233fd94d78a4201f0947b4b879ecb28f"
+  integrity sha512-oqMWvMXJFbBXo3ZKl0z88XBxFt6fn6AkpiPajTAdeytgfVg1o0+anZ+6sZV+5hSvCDxSN/ar9rlh1Oq/jfuq5A==
+  dependencies:
+    "@paybase/csp" "^1.0.4"
+
 "@types/estree@0.0.39":
   version "0.0.39"
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.39.tgz#e177e699ee1b8c22d23174caaa7422644389509f"
