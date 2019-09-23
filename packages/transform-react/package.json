@@ -1,0 +1,35 @@
+{
+  "name": "@ofc/transform-react",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "Joe Harlow <joe@paybase.io>",
+  "homepage": "https://github.com/f5io/ofc#readme",
+  "license": "ISC",
+  "main": "lib/transform-react.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/f5io/ofc.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/f5io/ofc/issues"
+  },
+  "dependencies": {
+    "@ofc/parser": "^0.0.0"
+  },
+  "peerDependencies": {
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "styled-components": "^4.3.2"
+
+  }
+}

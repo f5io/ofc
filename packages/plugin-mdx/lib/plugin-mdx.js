@@ -1,10 +1,12 @@
-const { resolve, normalize, join, parse } = require('path')
-const transformer = require('./transformer')
-const babel = require('rollup-plugin-babel')
+const { resolve, normalize, join, parse } = require('path');
+const mdx = require('./transformer');
+const react = require('@ofc/transform-react');
+const babel = require('rollup-plugin-babel');
 
 const getPlugins = ({ targets }) => {
   return [
-    transformer(targets),
+    mdx(),
+    react(targets),
     babel({
       exclude: 'node_modules/**',
       extensions: ['.md', '.mdx', '.js', '.ts', '.jsx', '.tsx'],

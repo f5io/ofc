@@ -1,6 +1,6 @@
 const { resolve, normalize, join, parse } = require('path');
-const transformer = require('./transformer');
 const fetch = require('@ofc/transform-fetch');
+const react = require('@ofc/transform-react');
 const babel = require('rollup-plugin-babel');
 
 const getPlugins = ({
@@ -14,7 +14,7 @@ const getPlugins = ({
 
   return [
     ...preludes,
-    transformer(targets),
+    react(targets),
     babel({
       exclude: 'node_modules/**',
       extensions: [ '.js', '.ts', '.jsx', '.tsx' ],

@@ -2,7 +2,7 @@ const { parser, printer, b, n, visit } = require('@ofc/parser');
 const { resolve, join } = require('path');
 const fs = require('fs').promises;
 
-const serverImpl = join(__dirname, 'helpers/server.js');
+const serverImpl = join(__dirname, 'templates/server.js');
 const serverAST = fs.readFile(serverImpl, 'utf8')
   .then(code => parser(code, serverImpl))
   .then(ast => {
@@ -10,7 +10,7 @@ const serverAST = fs.readFile(serverImpl, 'utf8')
     return ast;
   });
 
-const browserImpl = join(__dirname, 'helpers/browser.js');
+const browserImpl = join(__dirname, 'templates/browser.js');
 const browserAST = fs.readFile(browserImpl, 'utf8')
   .then(code => parser(code, browserImpl))
   .then(ast => {
@@ -136,7 +136,7 @@ const injectBrowserRenderer = async (ast, identifier) => {
 const hasInitialProps = hasExportNamed('getInitialProps');
 
 const plugin = ({ node: server }) => ({
-  name: '@ofc/plugin-react',
+  name: '@ofc/transform-react',
   async transform(code, id) {
     const moduleInfo = this.getModuleInfo(id);
     if (!moduleInfo.isEntry) return;
