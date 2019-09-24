@@ -26,6 +26,7 @@
     "rollup-plugin-babel": "^4.3.3"
   },
   "peerDependencies": {
+    "@mdx-js/react": "^1.0.2",
     "rollup": "^1.20.3"
   }
 }

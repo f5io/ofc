@@ -18,7 +18,7 @@ const assets = () => {
   return async (ctx, next) => {
     if (ctx.path.startsWith('/assets')) {
       if (ctx.path.endsWith('commonjs-proxy')) {
-        ctx.type = '.js'
+        ctx.type = '.js';
       }
       await handler(ctx, next);
     } else {

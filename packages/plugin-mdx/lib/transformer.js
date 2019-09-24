@@ -6,7 +6,10 @@ const plugin = () => ({
   name: '@ofc/plugin-mdx',
   async transform(code, id) {
     if (!id.endsWith('.md') && !id.endsWith('.mdx')) return;
-    return mdx(code);
+    const jsx = await mdx(code);
+    
+    return `import { mdx } from '@mdx-js/react';
+    ${jsx}`;
   },
 });
 
