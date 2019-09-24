@@ -1,4 +1,3 @@
-//const { parentPort, threadId, workerData } = require('worker_threads');
 const { join, parse, resolve } = require('path');
 const fs = require('fs').promises;
 const rollup = require('rollup');
@@ -6,8 +5,6 @@ const json = require('rollup-plugin-json');
 const replace = require('rollup-plugin-replace');
 const node_resolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
-
-const threadId = 1;
 
 const basePlugins = ({
   production,
@@ -34,6 +31,7 @@ const basePlugins = ({
 
 const generate = ({
   parentPort,
+  threadId,
   production,
   watch,
   input,
@@ -130,8 +128,8 @@ const prepare = ({ parentPort, input, pluginName, production, watch }) => {
     .map(po => generate({ parentPort, production, watch, ...po }));
 };
 
-const run = ({ parentPort, workerData }) =>
-  Promise.allSettled(prepare({ parentPort, ...workerData }))
+const run = ({ parentPort, threadId, workerData }) =>
+  Promise.allSettled(prepare({ parentPort, threadId, ...workerData }))
     .then(results => {
       parentPort.postMessage({
         code: 'PLUGIN_SETTLED',
