@@ -5,19 +5,23 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "start": "ofc serve production",
+    "start": "ofc serve",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "workspaces": {
-    "nohoist": [ "**" ]
+    "nohoist": [
+      "**"
+    ]
   },
   "dependencies": {
     "@ofc/cli": "^0.0.0",
     "node-fetch": "^2.6.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "styled-components": "^4.3.2"
+    "styled-components": "^4.3.2",
+    "@mdx-js/mdx": "^1.4.5",
+    "@mdx-js/react": "^1.0.2"
   }
 }

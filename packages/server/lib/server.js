@@ -14,7 +14,7 @@ const app = new Koa();
 const matchers = new Map();
 
 const assets = () => {
-  const handler = static(resolve('./.ofc')); 
+  const handler = static(resolve('./.ofc'));
   return async (ctx, next) => {
     if (ctx.path.startsWith('/assets')) {
       if (ctx.path.endsWith('commonjs-proxy')) {
@@ -24,29 +24,28 @@ const assets = () => {
     } else {
       await next();
     }
-  };
-};
+  }
+}
 
-const handler = (root) => {
+const handler = root => {
   return async (ctx, next) => {
-    const { params, handler } = [ ...matchers.entries() ]
-      .reduce((acc, [ re, h ]) => {
-        const r = re.exec(ctx.path);
-        if (r) {
-          const params = r.groups || {};
+    const { params, handler } = [...matchers.entries()].reduce((acc, [re, h]) => {
+      const r = re.exec(ctx.path);
+      if (r) {
+        const params = r.groups || {}
 
-          if (!acc.handler)
-            return {
-              params,
-              handler: h
-            };
+        if (!acc.handler)
+          return {
+            params,
+            handler: h,
+          };
 
-          if (Object.keys(params).length < Object.keys(acc.params).length) {
-            acc = { params, handler: h };
-          }
+        if (Object.keys(params).length < Object.keys(acc.params).length) {
+          acc = { params, handler: h };
         }
-        return acc;
-      }, {});
+      }
+      return acc;
+    }, {})
 
     if (handler) {
       ctx.params = params;
@@ -54,8 +53,8 @@ const handler = (root) => {
     } else {
       await next();
     }
-  };
-};
+  }
+}
 
 const invalidate = ({ input, uri, absolutePath }) => {
   if (!absolutePath || !absolutePath.includes('.ofc/server')) return false;
@@ -63,10 +62,9 @@ const invalidate = ({ input, uri, absolutePath }) => {
   const re = uriToRegex(uri);
   matchers.set(re, require(absolutePath));
   console.log(`mounted :: ${input} on uri :: ${uri} with regex :: ${re}`);
-};
+}
 
 const development = (app, messagePort) => {
-  
   const handler = async (ctx, next) => {
     if (ctx.path.startsWith('/_ofc_sse')) {
       const output = new PassThrough();
@@ -75,11 +73,11 @@ const development = (app, messagePort) => {
       ctx.set({
         'Content-Type': 'text/event-stream',
         'Cache-Control': 'no-cache',
-        'Connection': 'keep-alive',
+        Connection: 'keep-alive',
       });
 
       ctx.req.on('close', () => {
-        messagePort.off('message', onMessage); 
+        messagePort.off('message', onMessage)
       });
 
       const onMessage = event => {
@@ -88,33 +86,27 @@ const development = (app, messagePort) => {
           output.push(`event: ${event.code}\n`);
           output.push(`data: ${event.input}\n\n`);
         }
-      };
+      }
 
       ctx.body = output;
-    
+
       messagePort.on('message', onMessage);
     } else {
       await next();
     }
-  };
+  }
 
-  messagePort.on('message', ({ code, input, ...event }) => {
-    if (code === 'WRITE_END') {
-      console.log({ code, input, ...event });
-      invalidate({ input, ...event });
-    }
-  });
+  //messagePort.on('message', ({ code, input, ...event }) => {
+    //if (code === 'WRITE_END') {
+      //invalidate({ input, ...event })
+    //}
+  //})
 
   app.use(handler);
+}
 
-};
-
-module.exports = ({
-  messagePort,
-  manifest,
-  production,
-}) => {
-  const root = resolve('./.ofc/server'); 
+module.exports = ({ messagePort, manifest, production }) => {
+  const root = resolve('./.ofc/server');
 
   if (manifest)
     manifest
@@ -124,11 +116,9 @@ module.exports = ({
 
   app.use(assets());
 
-  if (!production)
-    development(app, messagePort);
+  if (!production) development(app, messagePort);
 
   app.use(handler(root));
 
   app.listen(3000);
 };
-
