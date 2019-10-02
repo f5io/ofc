@@ -29,5 +29,6 @@
   },
   "peerDependencies": {
     "rollup": "^1.20.3"
-  }
+  },
+  "gitHead": "fc4a7af2314f805b12c3b9ab502d0c0276dedee0"
 }
