@@ -1,6 +1,6 @@
 {
   "name": "@ofc/plugin-mdx",
-  "version": "0.0.1-alpha.0",
+  "version": "0.0.1-alpha.1",
   "description": "> TODO: description",
   "author": "f5io <joe@f5.io>",
   "homepage": "",
@@ -24,7 +24,7 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.3.3",
     "@mdx-js/mdx": "^1.4.5",
-    "@ofc/transform-react": "^0.0.1-alpha.0",
+    "@ofc/transform-react": "^0.0.1-alpha.1",
     "mdx.macro": "^0.2.9",
     "rollup-plugin-babel": "^4.3.3"
   },

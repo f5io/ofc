@@ -1,6 +1,6 @@
 {
   "name": "@ofc/plugin-lambda",
-  "version": "0.0.1-alpha.0",
+  "version": "0.0.1-alpha.1",
   "description": "> TODO: description",
   "author": "f5io <joe@f5.io>",
   "homepage": "",
@@ -24,7 +24,7 @@
     "@babel/parser": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-typescript": "^7.3.3",
-    "@ofc/transform-fetch": "^0.0.1-alpha.0",
+    "@ofc/transform-fetch": "^0.0.1-alpha.1",
     "rollup-plugin-babel": "^4.3.3"
   },
   "peerDependencies": {

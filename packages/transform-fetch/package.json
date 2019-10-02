@@ -1,12 +1,14 @@
 {
   "name": "@ofc/transform-fetch",
-  "version": "0.0.1-alpha.0",
+  "version": "0.0.1-alpha.1",
   "description": "> TODO: description",
   "author": "f5io <joe@f5.io>",
   "homepage": "https://github.com/f5io/ofc#readme",
   "license": "ISC",
   "main": "lib/transform-fetch.js",
-  "publishConfig": { "access": "public" },
+  "publishConfig": {
+    "access": "public"
+  },
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -25,7 +27,7 @@
     "url": "https://github.com/f5io/ofc/issues"
   },
   "dependencies": {
-    "@ofc/parser": "^0.0.1-alpha.0",
+    "@ofc/parser": "^0.0.1-alpha.1",
     "node-fetch": "^2.6.0"
   },
   "gitHead": "fc4a7af2314f805b12c3b9ab502d0c0276dedee0"
