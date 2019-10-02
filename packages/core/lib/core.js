@@ -9,7 +9,7 @@ const createPool = require('@paybase/pool');
 const pool = createPool({
   createProcess: () => require('./worker'),
   handler: (process, { parentPort, workerData }) =>
-    process.run({ parentPort, workerData }),
+    process.run({ parentPort, workerData, threadId: 1 }),
 });
 
 const threadPool = createPool({

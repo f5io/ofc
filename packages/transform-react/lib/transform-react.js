@@ -58,9 +58,22 @@ const getDefaultExport = ast => {
       const node = path.node;
       if (n.Identifier.check(node.declaration)) {
         result = node.declaration.name;
-      } else if (n.FunctionDeclaration.check(node.declaration)) {
+      } else if (n.FunctionDeclaration.check(node.declaration) && node.declaration.id) {
         result = node.declaration.id.name;
         path.insertBefore(node.declaration);
+      } else if (n.FunctionDeclaration.check(node.declaration)) {
+        const hoist = b.variableDeclaration('const', [
+          b.variableDeclarator(
+            b.identifier('__HANDLER'),
+            b.functionExpression(
+              null,
+              node.declaration.params,
+              node.declaration.body,
+            ),
+          )
+        ]);
+        path.insertBefore(hoist);
+        result = '__HANDLER';
       } else {
         const hoist = b.variableDeclaration('const', [
           b.variableDeclarator(

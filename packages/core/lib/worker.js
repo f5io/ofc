@@ -55,7 +55,8 @@ const generate = ({
           .catch(() => {});
       },
       get() {
-        if (inner) return inner;
+        //return Promise.resolve(inner);
+        if (inner) return Promise.resolve(inner);
         return fs
           .readFile(absolutePath + '.cache.json', 'utf8')
           .then(JSON.parse)
@@ -134,13 +135,14 @@ const prepare = ({ parentPort, input, pluginName, production, watch }) => {
 const run = ({ parentPort, threadId, workerData }) =>
   Promise.allSettled(prepare({ parentPort, threadId, ...workerData }))
     .then(results => {
-      parentPort.postMessage({
+      const result = {
         code: 'PLUGIN_SETTLED',
         threadId,
         ...workerData,
         results,
-      });
-      return results;
+      };
+      parentPort.postMessage(result);
+      return result;
     });
 
 module.exports = { run };
