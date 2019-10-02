@@ -6,6 +6,7 @@
   "homepage": "https://github.com/f5io/ofc#readme",
   "license": "ISC",
   "main": "lib/parser.js",
+  "publishConfig": { "access": "public" },
   "directories": {
     "lib": "lib",
     "test": "__tests__"
