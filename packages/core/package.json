@@ -1,12 +1,14 @@
 {
   "name": "@ofc/core",
-  "version": "0.0.0",
+  "version": "0.0.1-alpha.0",
   "description": "> TODO: description",
   "author": "f5io <joe@f5.io>",
   "homepage": "",
   "license": "ISC",
   "main": "lib/core.js",
-  "publishConfig": { "access": "public" },
+  "publishConfig": {
+    "access": "public"
+  },
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -18,10 +20,10 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@ofc/plugin-lambda": "^0.0.0",
-    "@ofc/plugin-mdx": "^0.0.0",
-    "@ofc/plugin-react": "^0.0.0",
-    "@ofc/server": "^0.0.0",
+    "@ofc/plugin-lambda": "^0.0.1-alpha.0",
+    "@ofc/plugin-mdx": "^0.0.1-alpha.0",
+    "@ofc/plugin-react": "^0.0.1-alpha.0",
+    "@ofc/server": "^0.0.1-alpha.0",
     "@paybase/pool": "^1.1.6",
     "fast-glob": "^3.0.4",
     "rollup": "^1.20.3",

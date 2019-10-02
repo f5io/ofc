@@ -1,6 +1,6 @@
 {
   "name": "@ofc/cli",
-  "version": "0.0.0",
+  "version": "0.0.1-alpha.0",
   "description": "> TODO: description",
   "author": "f5io <joe@f5.io>",
   "homepage": "https://github.com/f5io/ofc#readme",
@@ -9,7 +9,9 @@
   "bin": {
     "ofc": "bin/cli"
   },
-  "publishConfig": { "access": "public" },
+  "publishConfig": {
+    "access": "public"
+  },
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -26,7 +28,7 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@ofc/core": "^0.0.0",
+    "@ofc/core": "^0.0.1-alpha.0",
     "yargs": "^14.0.0"
   },
   "bugs": {

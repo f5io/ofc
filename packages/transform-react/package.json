@@ -1,6 +1,6 @@
 {
   "name": "@ofc/transform-react",
-  "version": "0.0.0",
+  "version": "0.0.1-alpha.0",
   "description": "> TODO: description",
   "author": "Joe Harlow <joe@paybase.io>",
   "homepage": "https://github.com/f5io/ofc#readme",
@@ -24,12 +24,11 @@
     "url": "https://github.com/f5io/ofc/issues"
   },
   "dependencies": {
-    "@ofc/parser": "^0.0.0"
+    "@ofc/parser": "^0.0.1-alpha.0"
   },
   "peerDependencies": {
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "styled-components": "^4.3.2"
-
   }
 }

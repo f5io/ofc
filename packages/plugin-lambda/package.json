@@ -1,12 +1,14 @@
 {
   "name": "@ofc/plugin-lambda",
-  "version": "0.0.0",
+  "version": "0.0.1-alpha.0",
   "description": "> TODO: description",
   "author": "f5io <joe@f5.io>",
   "homepage": "",
   "license": "ISC",
   "main": "lib/plugin-lambda.js",
-  "publishConfig": { "access": "public" },
+  "publishConfig": {
+    "access": "public"
+  },
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -22,7 +24,7 @@
     "@babel/parser": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-typescript": "^7.3.3",
-    "@ofc/transform-fetch": "^0.0.0",
+    "@ofc/transform-fetch": "^0.0.1-alpha.0",
     "rollup-plugin-babel": "^4.3.3"
   },
   "peerDependencies": {
