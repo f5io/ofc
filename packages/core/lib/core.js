@@ -92,8 +92,12 @@ const start = async ({
   const result = await Promise.all(workers);
   const manifest = result.map(([, result]) => result);
   if (!production && serve) {
+    const ports = new Set();
     result.forEach(([ port ]) => {
-      port.on('message', message => port1.postMessage(message));
+      if (!ports.has(port)) {
+        port.on('message', message => port1.postMessage(message));
+        ports.add(port);
+      }
     });
     server({ messagePort: port2, manifest, production });
   } else if (serve) {

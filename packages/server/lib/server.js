@@ -96,11 +96,11 @@ const development = (app, messagePort) => {
     }
   }
 
-  //messagePort.on('message', ({ code, input, ...event }) => {
-    //if (code === 'WRITE_END') {
-      //invalidate({ input, ...event })
-    //}
-  //})
+  messagePort.on('message', ({ code, input, ...event }) => {
+    if (code === 'WRITE_END') {
+      invalidate({ input, ...event })
+    }
+  });
 
   app.use(handler);
 }
