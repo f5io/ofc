@@ -71,7 +71,7 @@ const plugin = ({ input, production }) => {
         targets: { node: true },
       }),
       outputOptions: {
-        dir: resolve('./.ofc/server', path.dir),
+        dir: resolve('./.ofc/server'),
         format: 'cjs',
       },
       replaceOptions: {
@@ -94,7 +94,7 @@ const plugin = ({ input, production }) => {
         targets: { esmodules: true },
       }),
       outputOptions: {
-        dir: resolve('./.ofc/assets', path.dir),
+        dir: resolve('./.ofc/assets'),
         format: 'esm',
         sourcemap: !production,
       },

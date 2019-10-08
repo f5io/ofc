@@ -43,7 +43,7 @@ const generate = ({
 }) => {
   const { dir, name } = parse(input);
   const uri = '/' + join(dir, name);
-  const absolutePath = resolve(join(outputOptions.dir, name + '.js'));
+  const absolutePath = resolve(join(outputOptions.dir, dir, name + '.js'));
 
   const cache = (() => {
     let inner = null; 

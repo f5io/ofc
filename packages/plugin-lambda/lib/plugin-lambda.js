@@ -21,7 +21,7 @@ const plugin = ({
       }),
     ],
     outputOptions: {
-      dir: resolve('./.ofc/server', dirname(input)),
+      dir: resolve('./.ofc/server'),
       format: 'cjs',
     },
   };

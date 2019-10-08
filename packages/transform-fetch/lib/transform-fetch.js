@@ -7,13 +7,10 @@ const fetchAST = fs.readFile(fetchImpl, 'utf8')
   .then(code => parser(code, fetchImpl));
 
 const injectFetch = async (ast) => {
-  let inject = false;
-
   visit(ast, {
     visitCallExpression(path) {
       this.traverse(path);
       if (path.node.callee.name === 'fetch') {
-        inject = true;
         path.node.callee.name = '__ofc_fetch';
         path.replace(path.node);
       }
@@ -21,10 +18,8 @@ const injectFetch = async (ast) => {
     }
   });
 
-  if (inject) {
-    const fetch = await fetchAST;
-    ast.program.body.unshift(...fetch.program.body);
-  }
+  const fetch = await fetchAST;
+  ast.program.body.unshift(...fetch.program.body);
 
   return ast;
 };
