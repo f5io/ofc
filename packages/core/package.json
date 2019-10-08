@@ -1,6 +1,6 @@
 {
   "name": "@ofc/core",
-  "version": "0.0.1-alpha.3",
+  "version": "0.0.1-alpha.4",
   "description": "> TODO: description",
   "author": "f5io <joe@f5.io>",
   "homepage": "",
@@ -20,9 +20,9 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@ofc/plugin-lambda": "^0.0.1-alpha.1",
-    "@ofc/plugin-mdx": "^0.0.1-alpha.2",
-    "@ofc/plugin-react": "^0.0.1-alpha.2",
+    "@ofc/plugin-lambda": "^0.0.1-alpha.4",
+    "@ofc/plugin-mdx": "^0.0.1-alpha.4",
+    "@ofc/plugin-react": "^0.0.1-alpha.4",
     "@ofc/server": "^0.0.1-alpha.3",
     "@paybase/pool": "^1.1.6",
     "fast-glob": "^3.0.4",

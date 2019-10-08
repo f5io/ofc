@@ -1,6 +1,6 @@
 {
   "name": "@ofc/plugin-react",
-  "version": "0.0.1-alpha.2",
+  "version": "0.0.1-alpha.4",
   "description": "> TODO: description",
   "author": "f5io <joe@f5.io>",
   "homepage": "",
@@ -23,7 +23,7 @@
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.3.3",
-    "@ofc/transform-fetch": "^0.0.1-alpha.1",
+    "@ofc/transform-fetch": "^0.0.1-alpha.4",
     "@ofc/transform-react": "^0.0.1-alpha.2",
     "rollup-plugin-babel": "^4.3.3"
   },
