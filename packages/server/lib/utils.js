@@ -6,6 +6,8 @@
  */
 const isNext = Symbol('isNext');
 
+const isKoaNext = n => typeof n === 'function' && n.name === 'bound dispatch';
+
 /**
  * `compose` is variadic and takes middlewares as input.
  * It returns a variadic function which is invoked with context(s) and then executes
@@ -13,12 +15,13 @@ const isNext = Symbol('isNext');
  */
 const compose = (...mw) =>
   async (...args) => {
+    const last = args[args.length - 1];
     /**
      * The last `next` in the chain, should either call the `next` handler
      * passed via `args` (denoting a continuation into another composition),
      * or do a no-op.
      */
-    const nxt = args[args.length - 1][isNext] ? args.pop() : () => {};
+    const nxt = last[isNext] || isKoaNext(last) ? args.pop() : () => {};
     /**
      * `await` execution of all the middleware provided, by reducing each
      * supplied middleware and wrapping each function execution.

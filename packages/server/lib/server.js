@@ -97,6 +97,7 @@ const development = (app, messagePort) => {
   }
 
   messagePort.on('message', ({ code, input, ...event }) => {
+    console.log(`event :: ${code} :: ${input}`);
     if (code === 'WRITE_END') {
       invalidate({ input, ...event })
     }

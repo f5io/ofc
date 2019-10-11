@@ -1,4 +1,4 @@
-const { join, parse, resolve } = require('path');
+const { join, parse, resolve, relative } = require('path');
 const fs = require('fs').promises;
 const rollup = require('rollup');
 const json = require('rollup-plugin-json');
@@ -20,11 +20,10 @@ const basePlugins = ({
   }),
   node_resolve({
     preferBuiltins: true,
-    jail: process.cwd(),
     ...resolveOptions,
   }),
   commonjs({
-    include: 'node_modules/**',
+    include: /node_modules/,
     namedExports: namedExportOptions,
   }),
 ];
@@ -43,7 +42,7 @@ const generate = ({
 }) => {
   const { dir, name } = parse(input);
   const uri = '/' + join(dir, name);
-  const absolutePath = resolve(join(outputOptions.dir, dir, name + '.js'));
+  let absolutePath;
 
   const cache = (() => {
     let inner = null; 
@@ -75,7 +74,7 @@ const generate = ({
     });
 
   const defaultOptions = !production
-    ? { preserveModules: true, treeshake: false }
+    ? { preserveModules: true, preserveSymlinks: true, treeshake: false }
     : {};
 
   const allPlugins = [
@@ -86,6 +85,15 @@ const generate = ({
       resolveOptions,
       namedExportOptions
     }),
+    {
+      name: '@ofc/core',
+      generateBundle(options, bundle) {
+        const entry = Object.values(bundle).find(x => x.isEntry);
+        absolutePath = resolve(join(options.dir, entry.fileName));
+        const outputPath = relative(resolve('./.ofc'), absolutePath).replace(/^server/, 'assets');
+        entry.code = entry.code.replace(/OFC_OUTPUT_PATH/g, outputPath);
+      }
+    }
   ];
 
   const options = {

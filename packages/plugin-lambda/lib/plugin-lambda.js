@@ -12,7 +12,7 @@ const plugin = ({
     plugins: [
       fetch(),
       babel({
-        exclude: 'node_modules/**',
+        exclude: /node_modules/,
         extensions: [ '.js', '.ts' ],
         presets: [
           '@babel/preset-typescript',
@@ -21,7 +21,7 @@ const plugin = ({
       }),
     ],
     outputOptions: {
-      dir: resolve('./.ofc/server'),
+      dir: resolve('./.ofc/server', input),
       format: 'cjs',
     },
   };

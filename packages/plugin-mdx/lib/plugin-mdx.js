@@ -8,7 +8,7 @@ const getPlugins = ({ targets }) => {
     mdx(),
     react(targets),
     babel({
-      exclude: 'node_modules/**',
+      exclude: /node_modules/,
       extensions: ['.md', '.mdx', '.js', '.ts', '.jsx', '.tsx'],
       presets: [
         ['@babel/preset-typescript', { isTSX: true, allExtensions: true }],
@@ -24,13 +24,13 @@ const plugin = ({ input, production }) => {
 
   const replaceOptions = {
     OFC_REACT_INPUT: input,
-    OFC_REACT_ASSET: join(path.dir, path.name + '.js'),
+    OFC_REACT_ASSET: 'OFC_OUTPUT_PATH',
     OFC_REACT_APP: process.env.OFC_REACT_APP || '_ofc_app',
     OFC_REACT_PROPS: process.env.OFC_REACT_PROPS || '_ofc_props',
   }
 
   const namedExportOptions = {
-    'node_modules/react/index.js': [
+    'react': [
       'createRef',
       'Component',
       'PureComponent',
@@ -58,7 +58,7 @@ const plugin = ({ input, production }) => {
       'createFactory',
       'isValidElement',
     ],
-    'node_modules/react-is/index.js': ['isElement', 'isValidElementType', 'ForwardRef'],
+    'react-is': ['isElement', 'isValidElementType', 'ForwardRef'],
   }
 
   return [
@@ -71,7 +71,7 @@ const plugin = ({ input, production }) => {
         targets: { node: true },
       }),
       outputOptions: {
-        dir: resolve('./.ofc/server'),
+        dir: resolve('./.ofc/server', input),
         format: 'cjs',
       },
       replaceOptions: {
@@ -80,7 +80,6 @@ const plugin = ({ input, production }) => {
       },
       resolveOptions: {
         mainFields: ['main'],
-        dedupe: ['react', 'react-dom', 'styled-components'],
         extensions: ['.js', '.json', '.node'],
       },
       namedExportOptions,
@@ -94,7 +93,7 @@ const plugin = ({ input, production }) => {
         targets: { esmodules: true },
       }),
       outputOptions: {
-        dir: resolve('./.ofc/assets'),
+        dir: resolve('./.ofc/assets', input),
         format: 'esm',
         sourcemap: !production,
       },
@@ -104,7 +103,6 @@ const plugin = ({ input, production }) => {
       },
       resolveOptions: {
         mainFields: ['module', 'main', 'browser'],
-        dedupe: ['react', 'react-dom', 'styled-components'],
       },
       namedExportOptions,
       isEndpoint: false,

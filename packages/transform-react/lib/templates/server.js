@@ -26,7 +26,7 @@ const __ofc = (app, getInitialProps) => async (ctx) => {
         <script>
           window.OFC_REACT_PROPS = ${JSON.stringify(props)}
         </script>
-        <script src="/assets/OFC_REACT_ASSET" type="module"></script>
+        <script src="/OFC_REACT_ASSET" type="module"></script>
       </body>
     </html>
   `;

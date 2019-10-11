@@ -15,23 +15,24 @@ const pool = createPool({
 const threadPool = createPool({
   createProcess: () => new Worker(join(__dirname, 'wrapper.js')),
   handler: (worker, { workerData }) => new Promise((resolve, reject) => {
-    const cleanup = () => {
-      worker.off('message', onMessage);
-      worker.off('error', onError);
-    };
-    const onMessage = event => {
-      if (event.code === 'PLUGIN_SETTLED') {
-        resolve([ worker, event ]);
-        cleanup();
-      }
-    };
-    const onError = err => {
-      reject(err);
-      cleanup();
-    };
-    worker.on('message', onMessage);
-    worker.on('error', onError);
+    //const cleanup = () => {
+      //worker.off('message', onMessage);
+      //worker.off('error', onError);
+    //};
+    //const onMessage = event => {
+      //if (event.code === 'PLUGIN_SETTLED') {
+        //resolve([ worker, event ]);
+        //cleanup();
+      //}
+    //};
+    //const onError = err => {
+      //reject(err);
+      //cleanup();
+    //};
+    //worker.on('message', onMessage);
+    //worker.on('error', onError);
     worker.postMessage(workerData);
+    resolve(worker);
   }),
 });
 
@@ -90,16 +91,17 @@ const start = async ({
 
   const { port1, port2 } = new MessageChannel();
   const result = await Promise.all(workers);
-  const manifest = result.map(([, result]) => result);
+  //const manifest = result.map(([, result]) => result);
   if (!production && serve) {
     const ports = new Set();
-    result.forEach(([ port ]) => {
+    //result.forEach(([ port ]) => {
+    result.forEach(port => {
       if (!ports.has(port)) {
         port.on('message', message => port1.postMessage(message));
         ports.add(port);
       }
     });
-    server({ messagePort: port2, manifest, production });
+    server({ messagePort: port2, production });
   } else if (serve) {
     server({ manifest, production });
   } else {
