@@ -1,6 +1,6 @@
 {
   "name": "@ofc/cli",
-  "version": "0.0.1-alpha.4",
+  "version": "0.0.1-alpha.5",
   "description": "> TODO: description",
   "author": "f5io <joe@f5.io>",
   "homepage": "https://github.com/f5io/ofc#readme",
@@ -28,7 +28,7 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@ofc/core": "^0.0.1-alpha.4",
+    "@ofc/core": "^0.0.1-alpha.5",
     "yargs": "^14.0.0"
   },
   "bugs": {
