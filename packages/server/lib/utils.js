@@ -56,10 +56,13 @@ const uriToRegex = (() => {
   };
 })();
 
-const clearRequireCache = input =>
+const clearRequireCache = (input, absolutePath) => {
   Object.keys(require.cache)
     .filter(c => c.includes(`.ofc/server/${input}/`) && !c.includes('node_modules'))
     .forEach(s => delete require.cache[s]);
+
+  delete require.cache[absolutePath];
+};
 
 module.exports = {
   compose,

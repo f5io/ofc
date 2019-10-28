@@ -57,9 +57,8 @@ const handler = root => {
 };
 
 const invalidate = ({ input, uri, absolutePath }) => {
-  clearRequireCache(input);
   if (!absolutePath || !absolutePath.includes('.ofc/server')) return false;
-  delete require.cache[absolutePath];
+  clearRequireCache(input, absolutePath);
   const re = uriToRegex(uri);
   matchers.set(re, require(absolutePath));
   console.log(`mounted :: ${input} on uri :: ${uri} with regex :: ${re}`);
