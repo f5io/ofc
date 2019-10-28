@@ -2,7 +2,7 @@ const Koa = require('koa');
 const { resolve, normalize, relative, join, parse } = require('path');
 const static = require('koa-static');
 const { PassThrough } = require('stream');
-const { compose, uriToRegex } = require('./utils');
+const { compose, uriToRegex, clearRequireCache } = require('./utils');
 
 /*
  * TODO
@@ -24,20 +24,20 @@ const assets = () => {
     } else {
       await next();
     }
-  }
-}
+  };
+};
 
 const handler = root => {
   return async (ctx, next) => {
     const { params, handler } = [...matchers.entries()].reduce((acc, [re, h]) => {
       const r = re.exec(ctx.path);
       if (r) {
-        const params = r.groups || {}
+        const params = r.groups || {};
 
         if (!acc.handler)
           return {
             params,
-            handler: h,
+            handler: h
           };
 
         if (Object.keys(params).length < Object.keys(acc.params).length) {
@@ -45,7 +45,7 @@ const handler = root => {
         }
       }
       return acc;
-    }, {})
+    }, {});
 
     if (handler) {
       ctx.params = params;
@@ -53,16 +53,16 @@ const handler = root => {
     } else {
       await next();
     }
-  }
-}
+  };
+};
 
 const invalidate = ({ input, uri, absolutePath }) => {
   if (!absolutePath || !absolutePath.includes('.ofc/server')) return false;
-  delete require.cache[absolutePath];
+  clearRequireCache(input, absolutePath);
   const re = uriToRegex(uri);
   matchers.set(re, require(absolutePath));
   console.log(`mounted :: ${input} on uri :: ${uri} with regex :: ${re}`);
-}
+};
 
 const development = (app, messagePort) => {
   const handler = async (ctx, next) => {
@@ -73,11 +73,11 @@ const development = (app, messagePort) => {
       ctx.set({
         'Content-Type': 'text/event-stream',
         'Cache-Control': 'no-cache',
-        Connection: 'keep-alive',
+        Connection: 'keep-alive'
       });
 
       ctx.req.on('close', () => {
-        messagePort.off('message', onMessage)
+        messagePort.off('message', onMessage);
       });
 
       const onMessage = event => {
@@ -86,7 +86,7 @@ const development = (app, messagePort) => {
           output.push(`event: ${event.code}\n`);
           output.push(`data: ${event.input}\n\n`);
         }
-      }
+      };
 
       ctx.body = output;
 
@@ -94,17 +94,17 @@ const development = (app, messagePort) => {
     } else {
       await next();
     }
-  }
+  };
 
   messagePort.on('message', ({ code, input, ...event }) => {
     console.log(`event :: ${code} :: ${input}`);
     if (code === 'WRITE_END') {
-      invalidate({ input, ...event })
+      invalidate({ input, ...event });
     }
   });
 
   app.use(handler);
-}
+};
 
 module.exports = ({ messagePort, manifest, production }) => {
   const root = resolve('./.ofc/server');
