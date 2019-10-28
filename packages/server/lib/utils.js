@@ -4,9 +4,9 @@
  *
  * This allows for `compose(mw1, compose(mw2, mw3))` to work as intended.
  */
-const isNext = Symbol("isNext");
+const isNext = Symbol('isNext');
 
-const isKoaNext = n => typeof n === "function" && n.name === "bound dispatch";
+const isKoaNext = n => typeof n === 'function' && n.name === 'bound dispatch';
 
 /**
  * `compose` is variadic and takes middlewares as input.
@@ -43,14 +43,14 @@ const uriToRegex = (() => {
 
   const constructRegex = uri =>
     `^${uri
-      .replace(/\$([^\/]+)/g, "(?<$1>[^/]+?)")
-      .replace(/\/index$/, "(?:/index)?")
-      .replace(/$/, "/?")
-      .replace(/\//g, "\\/")}$`;
+      .replace(/\$([^\/]+)/g, '(?<$1>[^/]+?)')
+      .replace(/\/index$/, '(?:/index)?')
+      .replace(/$/, '/?')
+      .replace(/\//g, '\\/')}$`;
 
   return uri => {
     if (!cache.has(uri)) {
-      cache.set(uri, new RegExp(constructRegex(uri), "i"));
+      cache.set(uri, new RegExp(constructRegex(uri), 'i'));
     }
     return cache.get(uri);
   };
@@ -58,7 +58,7 @@ const uriToRegex = (() => {
 
 const clearRequireCache = input =>
   Object.keys(require.cache)
-    .filter(c => c.includes(`.ofc/server/${input}/`) && !c.includes("node_modules"))
+    .filter(c => c.includes(`.ofc/server/${input}/`) && !c.includes('node_modules'))
     .forEach(s => delete require.cache[s]);
 
 module.exports = {

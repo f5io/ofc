@@ -1,8 +1,8 @@
-const Koa = require("koa");
-const { resolve, normalize, relative, join, parse } = require("path");
-const static = require("koa-static");
-const { PassThrough } = require("stream");
-const { compose, uriToRegex, clearRequireCache } = require("./utils");
+const Koa = require('koa');
+const { resolve, normalize, relative, join, parse } = require('path');
+const static = require('koa-static');
+const { PassThrough } = require('stream');
+const { compose, uriToRegex, clearRequireCache } = require('./utils');
 
 /*
  * TODO
@@ -14,11 +14,11 @@ const app = new Koa();
 const matchers = new Map();
 
 const assets = () => {
-  const handler = static(resolve("./.ofc"));
+  const handler = static(resolve('./.ofc'));
   return async (ctx, next) => {
-    if (ctx.path.startsWith("/assets")) {
-      if (ctx.path.endsWith("commonjs-proxy")) {
-        ctx.type = ".js";
+    if (ctx.path.startsWith('/assets')) {
+      if (ctx.path.endsWith('commonjs-proxy')) {
+        ctx.type = '.js';
       }
       await handler(ctx, next);
     } else {
@@ -58,7 +58,7 @@ const handler = root => {
 
 const invalidate = ({ input, uri, absolutePath }) => {
   clearRequireCache(input);
-  if (!absolutePath || !absolutePath.includes(".ofc/server")) return false;
+  if (!absolutePath || !absolutePath.includes('.ofc/server')) return false;
   delete require.cache[absolutePath];
   const re = uriToRegex(uri);
   matchers.set(re, require(absolutePath));
@@ -67,18 +67,18 @@ const invalidate = ({ input, uri, absolutePath }) => {
 
 const development = (app, messagePort) => {
   const handler = async (ctx, next) => {
-    if (ctx.path.startsWith("/_ofc_sse")) {
+    if (ctx.path.startsWith('/_ofc_sse')) {
       const output = new PassThrough();
-      output.push("\n");
+      output.push('\n');
 
       ctx.set({
-        "Content-Type": "text/event-stream",
-        "Cache-Control": "no-cache",
-        Connection: "keep-alive"
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        Connection: 'keep-alive'
       });
 
-      ctx.req.on("close", () => {
-        messagePort.off("message", onMessage);
+      ctx.req.on('close', () => {
+        messagePort.off('message', onMessage);
       });
 
       const onMessage = event => {
@@ -91,15 +91,15 @@ const development = (app, messagePort) => {
 
       ctx.body = output;
 
-      messagePort.on("message", onMessage);
+      messagePort.on('message', onMessage);
     } else {
       await next();
     }
   };
 
-  messagePort.on("message", ({ code, input, ...event }) => {
+  messagePort.on('message', ({ code, input, ...event }) => {
     console.log(`event :: ${code} :: ${input}`);
-    if (code === "WRITE_END") {
+    if (code === 'WRITE_END') {
       invalidate({ input, ...event });
     }
   });
@@ -108,7 +108,7 @@ const development = (app, messagePort) => {
 };
 
 module.exports = ({ messagePort, manifest, production }) => {
-  const root = resolve("./.ofc/server");
+  const root = resolve('./.ofc/server');
 
   if (manifest)
     manifest
