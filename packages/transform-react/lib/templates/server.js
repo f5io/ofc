@@ -19,6 +19,7 @@ const __ofc = (app, getInitialProps) => async (ctx) => {
     <html>
       <head>
         <title>React App</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         ${sheet.getStyleTags()}
       </head>
       <body>
