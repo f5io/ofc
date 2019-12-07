@@ -14,14 +14,12 @@ const usage = () => logo('Usage: $0 [command] [env]');
 
 const prodAlias = [ 'prod', 'production' ];
 
-const run = (env, serve) => {
-  const message = serve
-    ? `Shit's gonna be happening on http://0.0.0.0:3000`
-    : `I'm just building... hold up!`;
+const run = (env, watch) => {
+  const message = `I'm just building... hold up!`;
 
   console.log(logo(message));
   core.start({
-    serve,
+    watch,
     production: prodAlias.includes(env),
   });
 };
@@ -30,8 +28,8 @@ const program = require('yargs')
   .usage(usage())
   .alias('h', 'help')
   .command({
-    command: 'serve [env]',
-    aliases: [ 's', '$0' ],
+    command: 'watch [env]',
+    aliases: [ 'w', '$0' ],
     desc: 'build and serve the current directory',
     builder: yargs => yargs.default('env', 'development'),
     handler: argv => run(argv.env, true),

@@ -1,4 +1,5 @@
 const { parser, printer, b, n, visit } = require('@ofc/parser');
+const { getDefaultExport } = require('@ofc/parser/lib/utils');
 const { resolve, join } = require('path');
 const fs = require('fs').promises;
 
@@ -49,46 +50,6 @@ const injectImport = (identifier, source, ast) => {
 
   ast.program.body.unshift(imp);
   return ast;
-};
-
-const getDefaultExport = ast => {
-  let result;
-  visit(ast, {
-    visitExportDefaultDeclaration(path) {
-      const node = path.node;
-      if (n.Identifier.check(node.declaration)) {
-        result = node.declaration.name;
-      } else if (n.FunctionDeclaration.check(node.declaration) && node.declaration.id) {
-        result = node.declaration.id.name;
-        path.insertBefore(node.declaration);
-      } else if (n.FunctionDeclaration.check(node.declaration)) {
-        const hoist = b.variableDeclaration('const', [
-          b.variableDeclarator(
-            b.identifier('__HANDLER'),
-            b.functionExpression(
-              null,
-              node.declaration.params,
-              node.declaration.body,
-            ),
-          )
-        ]);
-        path.insertBefore(hoist);
-        result = '__HANDLER';
-      } else {
-        const hoist = b.variableDeclaration('const', [
-          b.variableDeclarator(
-            b.identifier('__HANDLER'),
-            node.declaration,
-          )
-        ]);
-        path.insertBefore(hoist);
-        result = '__HANDLER';
-      }
-      path.replace(null);
-      return false;
-    }
-  });
-  return result;
 };
 
 const hasExportNamed = (identifier) => (ast) => {

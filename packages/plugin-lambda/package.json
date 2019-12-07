@@ -25,6 +25,7 @@
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-typescript": "^7.3.3",
     "@ofc/transform-fetch": "^0.0.1-alpha.4",
+    "@ofc/transform-now": "^0.0.1-alpha.1",
     "rollup-plugin-babel": "^4.3.3"
   },
   "peerDependencies": {

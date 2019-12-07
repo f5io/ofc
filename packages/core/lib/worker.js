@@ -74,8 +74,8 @@ const generate = ({
     });
 
   const defaultOptions = !production
-    ? { preserveModules: true, preserveSymlinks: true, treeshake: false }
-    : {};
+    ? { external: [ 'koa' ], preserveSymlinks: true, treeshake: false }
+    : { external: [ 'koa' ], preserveSymlinks: true };
 
   const allPlugins = [
     ...plugins,
@@ -104,7 +104,7 @@ const generate = ({
     output: outputOptions,
   };
 
-  if (!production && watch) {
+  if (watch) {
     const watcher = rollup.watch(options);
     watcher.on('event', ({ result, ...event }) => {
       emitEvent(event);

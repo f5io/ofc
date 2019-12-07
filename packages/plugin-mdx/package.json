@@ -24,6 +24,8 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.3.3",
     "@mdx-js/mdx": "^1.4.5",
+    "@ofc/transform-fetch": "^0.0.1-alpha.4",
+    "@ofc/transform-now": "^0.0.1-alpha.1",
     "@ofc/transform-react": "^0.0.1-alpha.5",
     "mdx.macro": "^0.2.9",
     "rollup-plugin-babel": "^4.3.3"

@@ -3,6 +3,7 @@
   "private": true,
   "workspaces": [
     "example",
+    "examples/*",
     "packages/*"
   ],
   "devDependencies": {

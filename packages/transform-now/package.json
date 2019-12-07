@@ -1,11 +1,11 @@
 {
-  "name": "@ofc/transform-fetch",
-  "version": "0.0.1-alpha.4",
+  "name": "@ofc/transform-now",
+  "version": "0.0.1-alpha.1",
   "description": "> TODO: description",
   "author": "f5io <joe@f5.io>",
   "homepage": "https://github.com/f5io/ofc#readme",
   "license": "ISC",
-  "main": "lib/transform-fetch.js",
+  "main": "lib/transform-now.js",
   "publishConfig": {
     "access": "public"
   },
