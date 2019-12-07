@@ -1,4 +1,4 @@
-import { compose } from '@ofc/server/lib/utils';
+import { compose } from '@ofc/middleware';
 import bodyParser from 'koa-bodyparser';
 
 export default compose(
