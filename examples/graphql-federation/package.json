@@ -1,5 +1,5 @@
 {
-  "name": "ofc-now",
+  "name": "graphql-federation",
   "version": "1.0.0",
   "description": "",
   "private": true,
@@ -10,10 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "workspaces": {
-    "nohoist": [
-      "koa",
-      "koa/**"
-    ]
+    "nohoist": [ "**" ]
   },
   "author": "",
   "license": "ISC",
@@ -21,11 +18,14 @@
     "node": "12.x"
   },
   "dependencies": {
-    "koa": "^2.11.0",
-    "koa-bodyparser": "^4.2.1"
+    "koa": "^2.11.0"
   },
   "devDependencies": {
+    "@apollo/federation": "^0.11.2",
+    "@apollo/gateway": "^0.11.4",
+    "apollo-server-koa": "^2.9.13",
+    "bufferutil": "^4.0.1",
     "@ofc/cli": "^0.0.1-alpha.4",
-    "@ofc/middleware": "^0.0.1-alpha.1"
+    "utf-8-validate": "^5.0.2"
   }
 }

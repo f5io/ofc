@@ -1,0 +1,39 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": ".ofc/server/**/*.js",
+      "use": "@now/node"
+    },
+    {
+      "src": ".ofc/assets/**",
+      "use": "@now/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/accounts/graphql/?",
+      "dest": "/.ofc/server/accounts/graphql.js"
+    },
+    {
+      "src": "/products/graphql/?",
+      "dest": "/.ofc/server/products/graphql.js"
+    },
+    {
+      "src": "/reviews/graphql/?",
+      "dest": "/.ofc/server/reviews/graphql.js"
+    },
+    {
+      "src": "/graphql/?",
+      "dest": "/.ofc/server/graphql.js"
+    },
+    {
+      "src": "/assets/(.*)",
+      "dest": "/.ofc/assets/$1"
+    },
+    {
+      "src": "/(.*)",
+      "status": 404
+    }
+  ]
+}

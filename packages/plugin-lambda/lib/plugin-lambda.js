@@ -27,6 +27,10 @@ const plugin = ({
       dir: resolve('./.ofc/server', dir),
       format: 'cjs',
     },
+    resolveOptions: {
+      mainFields: [ 'main' ],
+      extensions: [ '.js', '.json', '.node' ],
+    },
   };
 };
 

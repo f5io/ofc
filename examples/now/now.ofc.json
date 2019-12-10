@@ -24,16 +24,16 @@
       "dest": "/.ofc/server/api/post/index.js"
     },
     {
-      "src": "/view/?",
-      "dest": "/.ofc/server/view.js"
+      "src": "/markdown/?",
+      "dest": "/.ofc/server/markdown.js"
     },
     {
       "src": "/api/hello/(?<greeting>[^/]+?)/(?<name>[^/]+?)/?",
       "dest": "/.ofc/server/api/hello/@greeting/@name.js?greeting=$greeting&name=$name"
     },
     {
-      "src": "/markdown/?",
-      "dest": "/.ofc/server/markdown.js"
+      "src": "/view/?",
+      "dest": "/.ofc/server/view.js"
     },
     {
       "src": "/assets/(.*)",
