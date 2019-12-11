@@ -1,5 +1,4 @@
-import { ApolloServer, gql } from 'apollo-server-koa';
-import { buildFederatedSchema } from '@apollo/federation/dist/service/buildFederatedSchema';
+import { federated, gql } from '@ofc/graphql';
 
 const users = [
   {
@@ -40,6 +39,8 @@ const resolvers = {
   }
 };
 
-export default new ApolloServer({
-  schema: buildFederatedSchema({ typeDefs, resolvers }),
-}).getMiddleware({ path: '/accounts/graphql' });
+export default federated({
+  typeDefs,
+  resolvers,
+  path: '/accounts/graphql',
+});

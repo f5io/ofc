@@ -16,12 +16,12 @@
       "dest": "/.ofc/server/accounts/graphql.js"
     },
     {
-      "src": "/products/graphql/?",
-      "dest": "/.ofc/server/products/graphql.js"
-    },
-    {
       "src": "/reviews/graphql/?",
       "dest": "/.ofc/server/reviews/graphql.js"
+    },
+    {
+      "src": "/products/graphql/?",
+      "dest": "/.ofc/server/products/graphql.js"
     },
     {
       "src": "/graphql/?",

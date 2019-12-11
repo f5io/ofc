@@ -1,6 +1,6 @@
 {
   "name": "@ofc/core",
-  "version": "0.0.1-alpha.6",
+  "version": "0.0.1-alpha.10",
   "description": "> TODO: description",
   "author": "f5io <joe@f5.io>",
   "homepage": "",
@@ -20,9 +20,9 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@ofc/plugin-lambda": "^0.0.1-alpha.5",
-    "@ofc/plugin-mdx": "^0.0.1-alpha.5",
-    "@ofc/plugin-react": "^0.0.1-alpha.5",
+    "@ofc/plugin-lambda": "^0.0.1-alpha.10",
+    "@ofc/plugin-mdx": "^0.0.1-alpha.10",
+    "@ofc/plugin-react": "^0.0.1-alpha.10",
     "@paybase/pool": "^1.1.6",
     "fast-glob": "^3.0.4",
     "rollup": "^1.20.3",
@@ -31,5 +31,5 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-replace": "^2.2.0"
   },
-  "gitHead": "fc4a7af2314f805b12c3b9ab502d0c0276dedee0"
+  "gitHead": "b74f81be061fda9c56e2822ce510ebcfd3da78c7"
 }

@@ -1,5 +1,4 @@
-import { ApolloServer, gql } from 'apollo-server-koa';
-import { buildFederatedSchema } from '@apollo/federation/dist/service/buildFederatedSchema';
+import { federated, gql } from '@ofc/graphql';
 
 const usernames = [
   { id: "1", username: "@ada" },
@@ -44,6 +43,7 @@ const typeDefs = gql`
     id: ID! @external
     username: String! @external
     reviews: [Review]
+    numberOfReviews: Int
   }
   extend type Product @key(fields: "upc") {
     upc: String! @external
@@ -76,6 +76,8 @@ const resolvers = {
   }
 };
 
-export default new ApolloServer({
-  schema: buildFederatedSchema({ typeDefs, resolvers }),
-}).getMiddleware({ path: '/reviews/graphql' });
+export default federated({
+  typeDefs,
+  resolvers,
+  path: '/reviews/graphql',
+});

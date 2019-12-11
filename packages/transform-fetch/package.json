@@ -1,6 +1,6 @@
 {
   "name": "@ofc/transform-fetch",
-  "version": "0.0.1-alpha.4",
+  "version": "0.0.1-alpha.10",
   "description": "> TODO: description",
   "author": "f5io <joe@f5.io>",
   "homepage": "https://github.com/f5io/ofc#readme",
@@ -27,9 +27,9 @@
     "url": "https://github.com/f5io/ofc/issues"
   },
   "dependencies": {
-    "@ofc/middleware": "^0.0.1-alpha.6",
-    "@ofc/parser": "^0.0.1-alpha.1",
+    "@ofc/middleware": "^0.0.1-alpha.10",
+    "@ofc/parser": "^0.0.1-alpha.10",
     "node-fetch": "^2.6.0"
   },
-  "gitHead": "fc4a7af2314f805b12c3b9ab502d0c0276dedee0"
+  "gitHead": "b74f81be061fda9c56e2822ce510ebcfd3da78c7"
 }

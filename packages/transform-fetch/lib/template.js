@@ -18,9 +18,8 @@ const __ofc_fetch = (u, ...rest) => {
 
 const __ofc_fetch_middleware = async (ctx, next) => {
   if (__ofc_fetch_url.prefix == null) {
-    const deployment = ctx.headers['x-now-deployment-url'];
-    __ofc_fetch_url.prefix = deployment;
-    __ofc_fetch_url.protocol = deployment.startsWith('localhost') ? 'http://' : 'https://';
+    __ofc_fetch_url.prefix = ctx.deployment.prefix;
+    __ofc_fetch_url.protocol = ctx.deployment.protocol;
   }
   await next();
 };

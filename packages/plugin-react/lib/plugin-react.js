@@ -97,7 +97,7 @@ const plugin = ({
         'process.browser': 'true',
       },
       resolveOptions: {
-        mainFields: [ 'module', 'main', 'browser' ],
+        mainFields: [ 'browser', 'module', 'main' ],
       },
       namedExportOptions,
       isEndpoint: false,
