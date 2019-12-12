@@ -1,0 +1,35 @@
+{
+  "name": "@ofc/transform-now",
+  "version": "0.0.1-alpha.10",
+  "description": "> TODO: description",
+  "author": "f5io <joe@f5.io>",
+  "homepage": "https://github.com/f5io/ofc#readme",
+  "license": "ISC",
+  "main": "lib/transform-now.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/f5io/ofc.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/f5io/ofc/issues"
+  },
+  "dependencies": {
+    "@ofc/middleware": "^0.0.1-alpha.10",
+    "@ofc/parser": "^0.0.1-alpha.10",
+    "node-fetch": "^2.6.0"
+  },
+  "gitHead": "b74f81be061fda9c56e2822ce510ebcfd3da78c7"
+}

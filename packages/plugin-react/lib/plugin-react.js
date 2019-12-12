@@ -1,5 +1,6 @@
 const { resolve, normalize, join, parse } = require('path');
 const fetch = require('@ofc/transform-fetch');
+const now = require('@ofc/transform-now');
 const react = require('@ofc/transform-react');
 const babel = require('rollup-plugin-babel');
 
@@ -8,13 +9,13 @@ const getPlugins = ({
   production,
   targets,
 }) => {
-  const preludes = targets.node
-    ? [ fetch() ]
+  const after = targets.node
+    ? [ fetch(), now() ]
     : [];
 
   return [
-    ...preludes,
     react(targets),
+    ...after,
     babel({
       exclude: /node_modules/,
       extensions: [ '.js', '.ts', '.jsx', '.tsx' ],
@@ -65,7 +66,7 @@ const plugin = ({
         targets: { node: true },
       }),
       outputOptions: {
-        dir: resolve('./.ofc/server', input),
+        dir: resolve('./.ofc/server', path.dir),
         format: 'cjs',
       },
       replaceOptions: {
@@ -87,7 +88,7 @@ const plugin = ({
         targets: { esmodules: true },
       }),
       outputOptions: {
-        dir: resolve('./.ofc/assets', input),
+        dir: resolve('./.ofc/assets', path.dir),
         format: 'esm',
         sourcemap: !production,
       },
@@ -96,7 +97,7 @@ const plugin = ({
         'process.browser': 'true',
       },
       resolveOptions: {
-        mainFields: [ 'module', 'main', 'browser' ],
+        mainFields: [ 'browser', 'module', 'main' ],
       },
       namedExportOptions,
       isEndpoint: false,

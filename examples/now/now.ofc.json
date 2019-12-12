@@ -1,0 +1,47 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": ".ofc/server/**/*.js",
+      "use": "@now/node"
+    },
+    {
+      "src": ".ofc/assets/**",
+      "use": "@now/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/hello/(?<name>[^/]+?)/?",
+      "dest": "/.ofc/server/api/hello/@name.js?name=$name"
+    },
+    {
+      "src": "/api/hello/?",
+      "dest": "/.ofc/server/api/hello/index.js"
+    },
+    {
+      "src": "/api/post/?",
+      "dest": "/.ofc/server/api/post/index.js"
+    },
+    {
+      "src": "/markdown/?",
+      "dest": "/.ofc/server/markdown.js"
+    },
+    {
+      "src": "/api/hello/(?<greeting>[^/]+?)/(?<name>[^/]+?)/?",
+      "dest": "/.ofc/server/api/hello/@greeting/@name.js?greeting=$greeting&name=$name"
+    },
+    {
+      "src": "/view/?",
+      "dest": "/.ofc/server/view.js"
+    },
+    {
+      "src": "/assets/(.*)",
+      "dest": "/.ofc/assets/$1"
+    },
+    {
+      "src": "/(.*)",
+      "status": 404
+    }
+  ]
+}

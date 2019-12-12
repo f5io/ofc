@@ -1,12 +1,16 @@
 const { resolve, normalize, join, parse } = require('path');
 const mdx = require('./transformer');
 const react = require('@ofc/transform-react');
+const now = require('@ofc/transform-now');
 const babel = require('rollup-plugin-babel');
 
 const getPlugins = ({ targets }) => {
+  const after = targets.node
+    ? [ now() ] : [];
   return [
     mdx(),
     react(targets),
+    ...after,
     babel({
       exclude: /node_modules/,
       extensions: ['.md', '.mdx', '.js', '.ts', '.jsx', '.tsx'],
@@ -71,7 +75,7 @@ const plugin = ({ input, production }) => {
         targets: { node: true },
       }),
       outputOptions: {
-        dir: resolve('./.ofc/server', input),
+        dir: resolve('./.ofc/server', path.dir),
         format: 'cjs',
       },
       replaceOptions: {
@@ -93,7 +97,7 @@ const plugin = ({ input, production }) => {
         targets: { esmodules: true },
       }),
       outputOptions: {
-        dir: resolve('./.ofc/assets', input),
+        dir: resolve('./.ofc/assets', path.dir),
         format: 'esm',
         sourcemap: !production,
       },

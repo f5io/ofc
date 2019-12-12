@@ -21,11 +21,16 @@ const basePlugins = ({
   node_resolve({
     preferBuiltins: true,
     ...resolveOptions,
+    dedupe: [ 'apollo-graphql' ],
   }),
   commonjs({
     include: /node_modules/,
     namedExports: namedExportOptions,
   }),
+  // this hack replaces instances of module.require and just turns them into require
+  replace({
+    'module.require': 'require'
+  })
 ];
 
 const generate = ({
@@ -74,8 +79,8 @@ const generate = ({
     });
 
   const defaultOptions = !production
-    ? { preserveModules: true, preserveSymlinks: true, treeshake: false }
-    : {};
+    ? { external: [ 'koa' ], preserveSymlinks: true, treeshake: false }
+    : { external: [ 'koa' ], preserveSymlinks: true };
 
   const allPlugins = [
     ...plugins,
@@ -101,10 +106,13 @@ const generate = ({
     onwarn: warn => {}, // suppress for now
     input,
     plugins: allPlugins,
-    output: outputOptions,
+    output: {
+      ...outputOptions,
+      strict: false,
+    }
   };
 
-  if (!production && watch) {
+  if (watch) {
     const watcher = rollup.watch(options);
     watcher.on('event', ({ result, ...event }) => {
       emitEvent(event);

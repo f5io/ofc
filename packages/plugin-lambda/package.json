@@ -1,6 +1,6 @@
 {
   "name": "@ofc/plugin-lambda",
-  "version": "0.0.1-alpha.5",
+  "version": "0.0.1-alpha.10",
   "description": "> TODO: description",
   "author": "f5io <joe@f5.io>",
   "homepage": "",
@@ -24,11 +24,12 @@
     "@babel/parser": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-typescript": "^7.3.3",
-    "@ofc/transform-fetch": "^0.0.1-alpha.4",
+    "@ofc/transform-fetch": "^0.0.1-alpha.10",
+    "@ofc/transform-now": "^0.0.1-alpha.10",
     "rollup-plugin-babel": "^4.3.3"
   },
   "peerDependencies": {
     "rollup": "^1.20.3"
   },
-  "gitHead": "fc4a7af2314f805b12c3b9ab502d0c0276dedee0"
+  "gitHead": "b74f81be061fda9c56e2822ce510ebcfd3da78c7"
 }

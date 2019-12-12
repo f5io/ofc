@@ -1,0 +1,31 @@
+{
+  "name": "ofc-now",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "develop": "ofc build && now dev -A now.ofc.json",
+    "prod": "ofc build prod && now -A now.ofc.json",
+    "watch": "ofc watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "workspaces": {
+    "nohoist": [
+      "koa",
+      "koa/**"
+    ]
+  },
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": "12.x"
+  },
+  "dependencies": {
+    "koa": "^2.11.0",
+    "koa-bodyparser": "^4.2.1"
+  },
+  "devDependencies": {
+    "@ofc/cli": "^0.0.1-alpha.4",
+    "@ofc/middleware": "^0.0.1-alpha.1"
+  }
+}
