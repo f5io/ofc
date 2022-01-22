@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@ofc/parser": "^0.0.1-alpha.1",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^3.1.1"
   },
   "gitHead": "fc4a7af2314f805b12c3b9ab502d0c0276dedee0"
 }
